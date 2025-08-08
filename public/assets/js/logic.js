@@ -1,3 +1,6 @@
+// Compartido por estudiante, docente y directivo
+// Copiado desde /public/estudiante/logic.js con autodetección de tipo por URL
+
 // --- PROGRESO DE PREGUNTAS ---
 let TOTAL_PREGUNTAS = 0;
 
@@ -36,13 +39,22 @@ function actualizarProgreso() {
   }
 }
 /**
- * Lógica específica para el formulario de ESTUDIANTE.
- * Utiliza las herramientas de FormUtils para funcionar.
+ * Lógica compartida para formularios.
  */
 
 // --- CONFIGURACIÓN ---
 const API_BASE_URL = 'http://localhost:3000/api';
-const TIPO_FORMULARIO_ACTUAL = 'estudiante';
+// Detecta tipo de formulario según la URL para reutilizar este mismo archivo en /estudiante, /docente y /directivo
+const TIPO_FORMULARIO_ACTUAL = (() => {
+  try {
+    const p = (location.pathname || '').toLowerCase();
+    if (p.includes('/docente')) return 'docente';
+    if (p.includes('/directivo')) return 'directivo';
+    return 'estudiante';
+  } catch (_) {
+    return 'estudiante';
+  }
+})();
 
 // --- ELEMENTOS DEL DOM ---
 const contenedorPreguntas = document.getElementById('contenedor-preguntas');
@@ -84,8 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.academicData = academicResults; // Guarda los datos en el objeto window para fácil acceso
     window.formStructure = formResults;
     
-    // Ahora usamos las funciones de utils.js
-    // FormUtils.poblarFacultades(academicResults); // Suponiendo que la hemos movido a utils
+    // Render de secciones/preguntas
     FormUtils.generarSeccionesDePreguntas(contenedorPreguntas, formResults);
     
     // Configura los eventos de los botones
@@ -143,7 +154,7 @@ function mostrarAlerta(mensaje, tipo = 'error') {
  * Conecta los elementos del HTML con las funciones.
  */
 function configurarEventos() {
-  // Ejemplo para el botón de enviar
+  // Enviar
   botonEnviar.addEventListener('click', async () => {
     try {
       botonEnviar.disabled = true;
@@ -159,13 +170,12 @@ function configurarEventos() {
 
     } catch (error) {
       console.error('Error al enviar:', error);
-      // mostrarAlerta('No se pudo enviar la evaluación.', 'error');
       botonEnviar.disabled = false;
       botonEnviar.textContent = 'Enviar Evaluación';
     }
   });
 
-  // Aquí irían los addEventListener para los selectores en cascada.
+  // Navegación pasos
   botonSiguiente.addEventListener('click', () => avanzarPaso());
   botonAnterior.addEventListener('click', () => retrocederPaso());
 
@@ -248,8 +258,6 @@ function mostrarPaso(id) {
       el.setAttribute('aria-selected', activo ? 'true' : 'false');
     });
   }
-
-  // Barra de progreso: se mantiene sticky via CSS; no se necesita lógica JS
 
   // Footer buttons
   if (id === 1) {

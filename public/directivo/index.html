@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Sistema de Evaluación Docente de la Universidad Americana (UAM) - Evalúa a tus docentes y reflexiona sobre tu proceso de aprendizaje">
+    <meta name="keywords" content="UAM, Universidad Americana, evaluación docente, educación, calidad académica">
+    <meta name="author" content="Universidad Americana">
+    <title>Sistema de Evaluación Docente - Universidad Americana (UAM)</title>
+    <link rel="stylesheet" href="/assets/css/global.css">
+
+</head>
+
+<body>
+    <!-- 
+  Formulario Principal del Sistema de Evaluación Docente UAM
+  Diseño responsivo con unidades relativas para consistencia visual
+  Enfoque mobile-first con accesibilidad mejorada
+-->
+    <div class="contenedor-principal">
+        <div class="tarjeta-evaluacion">
+            <!-- Encabezado con logo destacado y branding institucional -->
+            <header class="encabezado-institucional">
+                <div class="contenido-encabezado">
+                    <!-- Logo institucional destacado con efectos visuales -->
+                    <div class="contenedor-logo-destacado">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GyhqAx7KK0M27H5LypfQVocF0UGozC2i7A&s"
+                            alt="Logo Universidad Americana UAM" class="logo-uam-oficial" />
+                    </div>
+                    <!-- Información institucional -->
+                    <div class="texto-encabezado">
+                        <h1 class="titulo-institucional">Universidad Americana</h1>
+                        <p class="subtitulo-institucional">UAM</p>
+                    </div>
+                </div>
+                <!-- Descripción del sistema -->
+                <div class="descripcion-sistema">
+                    <h2 class="titulo-sistema">Sistema de Evaluación Docente - Evaluación de Coordinador</h2>
+                    <p class="descripcion-texto">
+                        Tu opinión es fundamental para mejorar la calidad de la educación. Evalúa a tus docentes de
+                        manera constructiva y reflexiona sobre tu proceso de aprendizaje.
+                    </p>
+                </div>
+            </header>
+
+            <!-- Contenido principal del formulario -->
+            <main class="contenido-tarjeta">
+                <!-- Indicador de progreso accesible -->
+                <div class="seccion-progreso" role="progressbar" aria-label="Progreso de evaluación">
+                    <div class="texto-progreso" id="textoProgreso">Progreso: 0 de 19 preguntas respondidas</div>
+                    <div class="contenedor-barra-progreso">
+                        <div class="barra-progreso" id="barraProgreso"></div>
+                    </div>
+                </div>
+
+                <!-- Indicador de pasos del wizard (4 pasos principales) -->
+                <nav class="indicador-pasos" aria-label="Pasos de evaluación">
+                    <div id="indicador-paso1" class="paso activo" role="tab" aria-selected="true">
+                        <div class="circulo-paso">1</div>
+                        <div class="titulo-paso">Selección</div>
+                    </div>
+                    <!--<div id="linea-paso12" class="linea-paso"></div>
+          <div id="indicador-paso2" class="paso" role="tab" aria-selected="false">
+            <div class="circulo-paso">2</div>
+            <div class="titulo-paso">Autoreflexión</div>
+          </div>-->
+                    <div id="linea-paso23" class="linea-paso"></div>
+                    <div id="indicador-paso2" class="paso" role="tab" aria-selected="false">
+                        <div class="circulo-paso">2</div>
+                        <div class="titulo-paso">Evaluación</div>
+                    </div>
+                    <div id="linea-paso34" class="linea-paso"></div>
+                    <div id="indicador-paso3" class="paso" role="tab" aria-selected="false">
+                        <div class="circulo-paso">3</div>
+                        <div class="titulo-paso">Comentarios</div>
+                    </div>
+                </nav>
+
+                <!-- Formulario principal con estructura semántica -->
+                <form id="formularioEvaluacion" novalidate>
+                    <!-- Paso 1: Selección de información académica -->
+                    <section id="paso-1" class="seccion-formulario" role="tabpanel" aria-labelledby="indicador-paso1">
+                        <h2 class="titulo-seccion">Paso 1: Selecciona tu información académica</h2>
+                        <p class="subtitulo-seccion">Elige facultad, nivel, programa y asignatura a evaluar</p>
+
+                        <!-- Grid responsivo para campos de selección -->
+                        <div class="grilla-formulario">
+                            <div class="grupo-campo">
+                                <label for="selector-facultad" class="etiqueta-campo">Facultad / Unidad Académica</label>
+                                <select id="selector-facultad" class="selector-campo" required aria-describedby="ayuda-facultad">
+                                    <option value="">Seleccione una facultad</option>
+                                </select>
+                                <div id="ayuda-facultad" class="texto-ayuda">Selecciona tu facultad de estudio</div>
+                            </div>
+
+                            <div class="grupo-campo">
+                                <label for="selector-tipo-programa" class="etiqueta-campo">Nivel de Formación</label>
+                                <select id="selector-tipo-programa" class="selector-campo" required aria-describedby="ayuda-nivel">
+                                    <option value="">Seleccione un tipo</option>
+                                </select>
+                                <div id="ayuda-nivel" class="texto-ayuda">Selecciona tu nivel académico</div>
+                            </div>
+                        </div>
+
+                        <div class="grupo-campo">
+                            <label for="selector-programa" class="etiqueta-campo">Programa que cursa</label>
+                            <select id="selector-programa" class="selector-campo" required disabled aria-describedby="ayuda-programa">
+                                <option value="">Seleccione un programa</option>
+                            </select>
+                            <div id="ayuda-programa" class="texto-ayuda">Selecciona tu programa académico</div>
+                        </div>
+
+                        <div class="grupo-campo">
+                            <label for="selector-asignatura" class="etiqueta-campo">Asignatura a evaluar</label>
+                            <select id="selector-asignatura" class="selector-campo" required disabled aria-describedby="ayuda-asignatura">
+                                <option value="">Seleccione la asignatura a evaluar</option>
+                            </select>
+                            <div id="ayuda-asignatura" class="texto-ayuda">Selecciona la asignatura que deseas evaluar
+                            </div>
+                        </div>
+
+                        <div class="grupo-campo">
+                            <label class="etiqueta-campo">Docente</label>
+                            <select id="selector-docente-placeholder" class="selector-campo" disabled
+                                aria-describedby="ayuda-docente">
+                                <option value="">Seleccione una asignatura</option>
+                            </select>
+                            <span id="info-docente" style="display:none"></span>
+                            <div id="ayuda-docente" class="texto-ayuda">Docente asignado a la asignatura</div>
+                        </div>
+
+                        <!-- Botones globales de navegación se encuentran al final del formulario -->
+                    </section>
+
+                    <!-- Paso 2: Autoreflexión del Estudiante 
+          <section id="paso2" class="seccion-formulario" style="display: none;" role="tabpanel" aria-labelledby="indicador-paso2">
+            <h2 class="titulo-seccion">Paso 2: Autoreflexión del Estudiante</h2>
+            <p class="subtitulo-seccion">Evalúa tu propia participación en la asignatura usando la escala de 5 puntos</p>
+            
+            <!-- Leyenda de escala de evaluación 
+            <div class="leyenda-escala" role="group" aria-labelledby="titulo-leyenda">
+              <h3 id="titulo-leyenda" class="titulo-leyenda">Escala de Evaluación:</h3>
+              <div class="opciones-leyenda">
+                <span class="opcion-leyenda"><strong>5</strong> - Destacado</span>
+                <span class="opcion-leyenda"><strong>4</strong> - Competente</span>
+                <span class="opcion-leyenda"><strong>3</strong> - Bueno</span>
+                <span class="opcion-leyenda"><strong>2</strong> - Regular</span>
+                <span class="opcion-leyenda"><strong>1</strong> - Deficiente</span>
+              </div>
+            </div>
+            
+            <!-- Contenedor para preguntas generadas dinámicamente 
+            <div id="contenedorAutoreflexion" role="group" aria-labelledby="titulo-seccion">
+              <!-- Las preguntas se generan dinámicamente con JavaScript 
+            </div>
+            
+            <div class="botones-navegacion">
+              <button type="button" id="botonAnterior2" class="boton-navegacion boton-secundario">
+                <span class="sr-only">Volver al paso de</span>
+                Anterior
+              </button>
+              <button type="button" id="botonSiguiente2" class="boton-navegacion boton-primario">
+                Siguiente
+                <span class="sr-only">Ir a evaluación docente</span>
+              </button>
+            </div>
+          </section>-->
+
+                    <!-- Paso 3: Evaluación Docente (todas las subsecciones) -->
+                    <section id="paso-2" class="seccion-formulario" style="display: none;" role="tabpanel"
+                        aria-labelledby="indicador-paso2">
+                        <h2 class="titulo-seccion">Paso 2: Evaluación</h2>
+                        <p class="subtitulo-seccion">Evalúa el desempeño de tu docente en las siguientes áreas usando la
+                            escala de 5 puntos</p>
+
+                        <!-- Leyenda de escala de evaluación -->
+                        <div class="leyenda-escala" role="group" aria-labelledby="titulo-leyenda-docente">
+                            <h3 id="titulo-leyenda-docente" class="titulo-leyenda">Escala de Evaluación:</h3>
+                            <div class="opciones-leyenda">
+                                <span class="opcion-leyenda"><strong>5</strong> - Destacado</span>
+                                <span class="opcion-leyenda"><strong>4</strong> - Competente</span>
+                                <span class="opcion-leyenda"><strong>3</strong> - Bueno</span>
+                                <span class="opcion-leyenda"><strong>2</strong> - Regular</span>
+                                <span class="opcion-leyenda"><strong>1</strong> - Deficiente</span>
+                            </div>
+                        </div>
+                        <!-- Contenedor dinámico para todas las preguntas -->
+                        <div id="contenedor-preguntas" role="group" aria-label="Preguntas de evaluación"></div>
+
+                        <!-- Los botones globales de navegación están al final del formulario -->
+                    </section>
+
+                    <!-- Paso 4: Completado (Comentarios) -->
+                    <section id="paso-3" class="seccion-formulario" style="display: none;" role="tabpanel"
+                        aria-labelledby="indicador-paso3">
+                        <h2 class="titulo-seccion">Paso 4: Comentarios Adicionales</h2>
+                        <p class="subtitulo-seccion">Comparte cualquier comentario adicional sobre tu experiencia
+                            académica</p>
+
+                        <div class="grupo-campo">
+                            <label for="comentarios" class="etiqueta-campo">Comentarios adicionales (opcional)</label>
+                            <textarea id="comentarios" class="area-texto-comentarios" rows="1"
+                                placeholder="Escribe aquí tus comentarios, sugerencias o cualquier observación adicional que consideres importante..."
+                                aria-describedby="ayuda-comentarios">
+              </textarea>
+                            <div id="ayuda-comentarios" class="texto-ayuda">Tus comentarios nos ayudan a mejorar
+                                continuamente la calidad educativa</div>
+                        </div>
+
+                        <!-- Los botones globales de navegación están al final del formulario -->
+                    </section>
+
+                    <!-- Paso 5: Mensaje de éxito -->
+                    <section id="paso-exito" class="seccion-formulario seccion-exito" style="display: none;"
+                        role="tabpanel">
+                        <div class="contenido-exito">
+                            <div class="icono-exito" aria-hidden="true">
+                                <div class="circulo-exito-uam">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Eo_circle_cyan_white_checkmark.svg"
+                                        alt="Éxito" class="checkmark-svg" width="80" height="80" />
+                                    <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <h2 class="titulo-exito">¡Evaluación Completada Exitosamente!</h2>
+                            <p class="mensaje-exito">
+                                Gracias por tu participación. Tus respuestas han sido registradas y contribuirán a
+                                mejorar la calidad educativa de la Universidad Americana.
+                            </p>
+                            <p class="instrucciones-cierre">
+                                Puedes cerrar esta ventana. Se abrirá automáticamente el sitio web de UAM en una nueva
+                                pestaña.
+                            </p>
+                        </div>
+                    </section>
+                    <!-- Footer global de navegación, usado por assets/js/logic.js -->
+                    <footer class="botones-navegacion">
+                        <button type="button" id="boton-anterior" class="boton-navegacion boton-secundario"
+                            style="display:none;">Anterior</button>
+                        <button type="button" id="boton-siguiente"
+                            class="boton-navegacion boton-primario">Siguiente</button>
+                        <button type="button" id="boton-enviar" class="boton-envio" style="display:none;">Enviar
+                            Evaluación</button>
+                    </footer>
+                </form>
+            </main>
+        </div>
+    </div>
+
+    <!-- Alerta flotante accesible para notificaciones -->
+    <div id="alertaPersonalizada" class="alerta-flotante" role="alert" aria-live="polite" aria-atomic="true">
+        <!-- Contenido de alerta se inserta dinámicamente -->
+    </div>
+
+    <script src="/assets/js/utils.js"></script>
+    <script src="/assets/js/logic.js"></script>
+</body>
+
+</html>

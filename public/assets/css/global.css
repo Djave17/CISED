@@ -96,6 +96,12 @@
     font-weight: 600;
     color: var(--color-primario);
   }
+
+  .descripcion-texto{
+    
+    color: white !important;
+    
+  }
   
   /* ---- CONTENEDOR PRINCIPAL ---- */
   .contenedor-principal {
@@ -147,6 +153,9 @@
     color: white;
     padding: var(--espaciado-l) var(--espaciado-m);
     text-align: center;
+    /* Bordes superiores más redondeados */
+    border-top-left-radius: calc(var(--radio-borde-l) * 1.25);
+    border-top-right-radius: calc(var(--radio-borde-l) * 1.25);
   }
   
   .contenido-encabezado {

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sistema de Evaluación Docente UAM - Autoevaluación del Docente" />
+    <title>Autoevaluación del Docente - UAM</title>
+    <link rel="stylesheet" href="/assets/css/global.css" />
+</head>
+
+<body>
+    <div class="contenedor-principal">
+        <div class="tarjeta-evaluacion">
+            <header class="encabezado-institucional">
+                <div class="contenido-encabezado">
+                    <div class="contenedor-logo-destacado">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GyhqAx7KK0M27H5LypfQVocF0UGozC2i7A&s"
+                            alt="Logo Universidad Americana UAM" class="logo-uam-oficial" />
+                    </div>
+                    <div class="texto-encabezado">
+                        <h1 class="titulo-institucional">Universidad Americana</h1>
+                        <p class="subtitulo-institucional">UAM</p>
+                    </div>
+                </div>
+                <div class="descripcion-sistema">
+                    <h2 class="titulo-sistema">Sistema de Evaluación Docente - Autoevaluación</h2>
+                    <p class="descripcion-texto">Completa tu autoevaluación con base en la escala de 1 (Deficiente) a 5
+                        (Destacado).</p>
+                </div>
+            </header>
+
+            <main class="contenido-tarjeta">
+                <!-- Progreso -->
+                <div class="seccion-progreso" role="progressbar" aria-label="Progreso de evaluación">
+                    <div class="texto-progreso" id="textoProgreso">Progreso: 0 de 0 preguntas respondidas</div>
+                    <div class="contenedor-barra-progreso">
+                        <div class="barra-progreso" id="barraProgreso"></div>
+                    </div>
+                </div>
+
+                <!-- Stepper 3 pasos -->
+                <nav class="indicador-pasos" aria-label="Pasos de evaluación">
+                    <div id="indicador-paso1" class="paso activo" role="tab" aria-selected="true">
+                        <div class="circulo-paso">1</div>
+                        <div class="titulo-paso">Selección</div>
+                    </div>
+                    <div class="linea-paso" aria-hidden="true"></div>
+                    <div id="indicador-paso2" class="paso" role="tab" aria-selected="false">
+                        <div class="circulo-paso">2</div>
+                        <div class="titulo-paso">Evaluación</div>
+                    </div>
+                    <div class="linea-paso" aria-hidden="true"></div>
+                    <div id="indicador-paso3" class="paso" role="tab" aria-selected="false">
+                        <div class="circulo-paso">3</div>
+                        <div class="titulo-paso">Comentarios</div>
+                    </div>
+                </nav>
+
+                <form id="evaluation-form">
+                    <!-- Paso 1: Selección -->
+                    <section id="paso-1" class="seccion-formulario" role="tabpanel" aria-labelledby="indicador-paso1">
+
+                        <h3 class="titulo-seccion">Paso 1: Selecciona tu información académica</h3>
+                        <p class="texto-ayuda">Elige facultad, nivel, programa y asignatura a evaluar.</p>
+                        <div class="grupo-campo">
+                            <label class="etiqueta-campo" for="selector-facultad">Facultad:</label>
+                            <select class="selector-campo" id="selector-facultad" name="facultad" required>
+                                <option value="">Selecciona una facultad</option>
+                            </select>
+                            <p class="texto-ayuda">Selecciona tu facultad de estudio</p>
+                        </div>
+                        <div class="grupo-campo">
+                            <label class="etiqueta-campo" for="selector-tipo-programa">Tipo de Programa:</label>
+                            <select class="selector-campo" id="selector-tipo-programa" name="tipoPrograma" required
+                                disabled>
+                                <option value="">Selecciona un tipo de programa</option>
+                            </select>
+                            <p class="texto-ayuda">Selecciona tu nivel académico</p>
+                        </div>
+                        <div class="grupo-campo">
+                            <label class="etiqueta-campo" for="selector-programa">Programa:</label>
+                            <select class="selector-campo" id="selector-programa" name="programa" required disabled>
+                                <option value="">Selecciona un programa</option>
+                            </select>
+                            <p class="texto-ayuda">Selecciona tu programa de estudios</p>
+                        </div>
+                        <div class="grupo-campo">
+                            <label class="etiqueta-campo" for="selector-asignatura">Asignatura:</label>
+                            <select class="selector-campo" id="selector-asignatura" name="asignatura" required disabled>
+                                <option value="">Selecciona una asignatura</option>
+                            </select>
+                            <p class="texto-ayuda">Selecciona la asignatura a evaluar</p>
+                        </div>
+                        <div class="grupo-campo">
+                            <label class="etiqueta-campo">Docente a Evaluar:</label>
+                            <select id="selector-docente-placeholder" class="selector-campo" disabled>
+                                <option value="">...</option>
+                            </select>
+                            <p class="texto-ayuda">El docente se selecciona automaticamente</p>
+                            <p id="info-docente" class="campo-texto info-docente" style="display:none;"></p>
+
+                        </div>
+                    </section>
+
+                    <!-- Paso 2: Evaluación -->
+                    <section id="paso-2" class="seccion-formulario" style="display:none;">
+                        <h3 class="titulo-seccion">2. Autoevaluación de Desempeño</h3>
+                        <p class="texto-ayuda">Responde cada enunciado usando la escala de 1 (Deficiente) a 5
+                            (Destacado).</p>
+                        <div class="leyenda-escala" role="group" aria-label="Escala de evaluación">
+                            <h4 class="titulo-leyenda">Escala de Evaluación:</h4>
+                            <div class="opciones-leyenda">
+                                <span class="opcion-leyenda"><strong>5</strong> - Destacado</span>
+                                <span class="opcion-leyenda"><strong>4</strong> - Competente</span>
+                                <span class="opcion-leyenda"><strong>3</strong> - Bueno</span>
+                                <span class="opcion-leyenda"><strong>2</strong> - Regular</span>
+                                <span class="opcion-leyenda"><strong>1</strong> - Deficiente</span>
+                            </div>
+                        </div>
+                        <div id="contenedor-preguntas">
+                            <p>Cargando preguntas...</p>
+                        </div>
+                    </section>
+
+                    <!-- Paso 3: Comentarios -->
+                    <section id="paso-3" class="seccion-formulario" style="display:none;">
+                        <h3 class="titulo-seccion">3. Comentarios Adicionales</h3>
+                        <p class="texto-ayuda">Opcional: comparte observaciones o sugerencias.</p>
+                        <div class="grupo-campo">
+                            <label class="etiqueta-campo" for="comentarios">Comentarios:</label>
+                            <textarea class="area-texto-comentarios" id="comentarios" rows="4"
+                                placeholder="Escribe tus comentarios..."></textarea>
+                        </div>
+                    </section>
+
+                    <!-- Paso Éxito -->
+                    <section id="paso-exito" class="seccion-formulario seccion-exito" style="display: none;"
+                        role="tabpanel">
+                        <div class="contenido-exito">
+                            <div class="icono-exito" aria-hidden="true">
+                                <div class="circulo-exito-uam">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Eo_circle_cyan_white_checkmark.svg"
+                                        alt="Éxito" class="checkmark-svg" width="80" height="80" />
+                                    <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <h2 class="titulo-exito">¡Evaluación Completada Exitosamente!</h2>
+                            <p class="mensaje-exito">
+                                Gracias por tu participación. Tus respuestas han sido registradas y contribuirán a
+                                mejorar la calidad educativa de la Universidad Americana.
+                            </p>
+                            <p class="instrucciones-cierre">
+                                Puedes cerrar esta ventana. Se abrirá automáticamente el sitio web de UAM en una nueva
+                                pestaña.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Footer de navegación -->
+                    <footer class="botones-navegacion">
+                        <button type="button" id="boton-anterior" class="boton-navegacion boton-secundario"
+                            style="display:none;">Anterior</button>
+                        <button type="button" id="boton-siguiente"
+                            class="boton-navegacion boton-primario">Siguiente</button>
+                        <button type="button" id="boton-enviar" class="boton-envio" style="display:none;">Enviar
+                            Evaluación</button>
+                    </footer>
+                </form>
+            </main>
+        </div>
+    </div>
+
+    <script src="/assets/js/utils.js"></script>
+    <script src="/assets/js/logic.js"></script>
+</body>
+
+</html>
