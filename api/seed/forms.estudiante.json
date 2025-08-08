@@ -1,0 +1,57 @@
+{
+  "tipoFormulario": "estudiante",
+  "secciones": [
+    {
+      "id": "autoreflexion",
+      "titulo": "Autoreflexión del Estudiante",
+      "preguntas": [
+        { "id": "asistencia", "texto": "¿Asistí a las sesiones presenciales y/o sincrónicas de esta asignatura?" },
+        { "id": "actividades", "texto": "Realicé las actividades evaluativas propuestas por el docente en esta asignatura" },
+        { "id": "satisfaccion", "texto": "¿Me siento satisfecho con lo aprendido en esta asignatura?" }
+      ]
+    },
+    {
+      "id": "introduccion",
+      "titulo": "Introducción del Curso",
+      "preguntas": [
+        { "id": "intro_programa_y_evaluacion", "texto": "Al iniciar la asignatura: ¿Su profesor le comunicó y explicó detalladamente el programa del curso y la forma en que se evaluará?" }
+      ]
+    },
+    {
+      "id": "competencia_pedagogica",
+      "titulo": "A. Competencia Pedagógica",
+      "preguntas": [
+        { "id": "planificacion_actividades_syllabus", "texto": "Planifica y desarrolla las actividades de acuerdo al contenido y competencias establecidas en el syllabus" },
+        { "id": "recursos_tecnologicos_estrategias", "texto": "Utiliza diferentes recursos tecnológicos para el desarrollo de las estrategias de aprendizaje" },
+        { "id": "aprendizaje_equipo_tic", "texto": "Promueve el aprendizaje en equipo con apoyo de las TIC (tecnologías de la información y la comunicación)" },
+        { "id": "bibliografia_actualizada", "texto": "Utiliza la bibliografía recomendada y otras fuentes de información actualizadas que sirven para consolidar y profundizar los conocimientos" },
+        { "id": "material_estudio_aprendizaje_autonomo", "texto": "Proporciona material de estudio (documentos, diapositivas, videos, infografías, páginas web, entre otros) para el desarrollo del aprendizaje autónomo" },
+        { "id": "motiva_estudiantes", "texto": "Motiva a los estudiantes durante el aprendizaje" },
+        { "id": "asesoria_oportuna_dudas", "texto": "Asesora oportunamente a los estudiantes sobre las dudas que surgen en la clase" },
+        { "id": "claridad_evaluaciones", "texto": "Las evaluaciones que realiza son orientadas con claridad y presenta los criterios y formas de evaluación" },
+        { "id": "retroalimentacion_adecuada", "texto": "Retroalimenta adecuadamente los resultados de las actividades de aprendizaje asignadas en la plataforma UAM Virtual o en el aula de clases" },
+        { "id": "atiende_dificultades", "texto": "Atiende las dificultades de los estudiantes cuando estas surgen" },
+        { "id": "equidad_respeto_cordialidad", "texto": "Trata a todos con equidad, respeto y cordialidad" },
+        { "id": "relacion_cordial_respetuosa", "texto": "Mantiene una relación cordial y respetuosa" }
+      ]
+    },
+    {
+      "id": "dominio_materia",
+      "titulo": "B. Dominio de la Materia",
+      "preguntas": [
+        { "id": "preparacion_y_claridad", "texto": "En cada sesión (presencial o virtual), mostró preparación al dar su clase y explicó con claridad el contenido o temas abordados" },
+        { "id": "ejemplifica_casos", "texto": "Ejemplifica y/o muestra casos concretos desde su experiencia profesional" },
+        { "id": "relaciona_realidad", "texto": "Relaciona los contenidos de estudio con la realidad nacional e internacional" }
+      ]
+    },
+    {
+      "id": "competencia_tecnologica",
+      "titulo": "C. Competencia Tecnológica",
+      "preguntas": [
+        { "id": "dominio_recursos_tecnologicos", "texto": "Demuestra dominio de los recursos tecnológicos" },
+        { "id": "uso_tic_conocimiento", "texto": "Hace adecuado uso de las TIC para la construcción del conocimiento" },
+        { "id": "uso_plataforma_uam_virtual", "texto": "Dominio y uso de la plataforma UAM Virtual" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tipoFormulario": "directivo",
+  "secciones": [
+    {
+      "id": "competencia_pedagogica",
+      "titulo": "A. Competencia Pedagógica",
+      "preguntas": [
+        { "id": "planifica_actividades_syllabus", "texto": "Planifica y desarrolla las actividades de acuerdo al contenido y competencias establecidas en el syllabus" },
+        { "id": "recursos_tecnologicos", "texto": "Utiliza diferentes recursos tecnológicos para el desarrollo de las estrategias de aprendizaje" },
+        { "id": "material_estudio_aprendizaje_autonomo", "texto": "Proporciona material de estudio (Documentos, diapositivas, páginas web, entre otros) para el desarrollo del aprendizaje autónomo" },
+        { "id": "motiva_estudiantes", "texto": "Motiva a los estudiantes durante el aprendizaje" },
+        { "id": "asesora_dudas_oportunamente", "texto": "Asesora oportunamente a los estudiantes sobre las dudas que surgen en la clase" },
+        { "id": "retroalimenta_proceso", "texto": "Retroalimenta adecuadamente el proceso de aprendizaje en la plataforma UAM Virtual y/o en el aula de clases" },
+        { "id": "relacion_cordial_respetuosa", "texto": "⁠Mantuvo una relación cordial y respetuosa con los estudiantes" }
+      ]
+    },
+    {
+      "id": "competencia_tecnologica",
+      "titulo": "B. Competencia Tecnológica",
+      "preguntas": [
+        { "id": "dominio_recursos_tecnologicos", "texto": "Demuestra dominio de los recursos tecnológicos" },
+        { "id": "uso_tic_construccion_conocimiento", "texto": "Hace adecuado uso de las TIC para la construcción del conocimiento" },
+        { "id": "uso_plataforma_uam_virtual", "texto": "Dominio y uso de la plataforma UAM Virtual" }
+      ]
+    }
+  ]
+}

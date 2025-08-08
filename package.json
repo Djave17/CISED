@@ -1,5 +1,5 @@
 {
-  "name": "encuestas(node.js)",
+  "name": "cised",
   "version": "1.0.0",
   "description": "Este documento detalla la arquitectura, tecnología y funcionamiento del Sistema de Evaluación Docente, diseñado para ser una aplicación web moderna, escalable y de bajo costo.",
   "main": "index.js",
@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node api/server.js" 
+    "dev": "node api/server.js",
+    "seed:forms": "node api/seed/seed-forms.js" 
   },
   "keywords": [],
   "author": "",

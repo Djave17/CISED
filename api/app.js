@@ -1,6 +1,7 @@
 // Importa las librerías necesarias.
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const app = express();
 
 // --- Middlewares (Plugins) ---
@@ -22,9 +23,17 @@ app.use('/api/forms', questionFormRoutes);
 // Para URLs que empiecen con '/api/evaluations', usa las reglas de evaluationRoutes.
 app.use('/api/evaluations', evaluationRoutes);
 
+// --- Servir frontend estático ---
+app.use(express.static(path.join(__dirname, '../public')));
+
 // Una ruta de bienvenida para verificar fácilmente que la API está funcionando.
 app.get('/api', (req, res) => {
   res.json({ message: 'API de Encuestas UAM funcionando.' });
+});
+
+// Redirección conveniente a la vista de estudiante
+app.get('/', (req, res) => {
+  res.redirect('/estudiante/index.html');
 });
 
 // Exporta la 'app' configurada para que server.js pueda usarla.

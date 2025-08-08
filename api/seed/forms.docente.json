@@ -1,0 +1,22 @@
+{
+  "tipoFormulario": "docente",
+  "secciones": [
+    {
+      "id": "competencia_pedagogica",
+      "titulo": "Autoevaluación Docente - Competencia Pedagógica",
+      "preguntas": [
+        { "id": "presenta_silabo", "texto": "Presente el sílabo y explique con claridad el contenido del curso" },
+        { "id": "criterios_evaluacion_anticipacion", "texto": "Establecí con anticipación los criterios y procedemientos de evaluación" },
+        { "id": "metodologias_aprendizaje", "texto": "⁠Utilicé metodologías que contribuyeron al buen aprendizaje de la asignatura y motivación para el estudio de la misma" },
+        { "id": "material_bibliografico", "texto": "Entregué material bibliográfico adecuado, suficiente y útil para los própositos del curso " },
+        { "id": "dominio_preparacion", "texto": "Mostré dominio y preparación del curso impartido" },
+        { "id": "asistencia_puntualidad", "texto": "Asistí al curso los días asignados y fui puntual en el horario establecido" },
+        { "id": "relacion_contenidos_practica", "texto": "Relacione los contenidos del curso con la prática profesional" },
+        { "id": "dialogo_participacion", "texto": "Propicie un ambiente de diálogo y participación durante las clases" },
+        { "id": "relacion_cordial_respetuosa", "texto": "Mantuve una relación cordial y respetuosa con los estudiantes" },
+        { "id": "aclarar_dudas_orientar", "texto": "Mostré disposición para aclarar dudas y orienté adecuadamente los trabajos a realizar" },
+        { "id": "asesoria_evaluacion_no_presencial", "texto": "Asesore y evalué las actividades no presenciales" }
+      ]
+    }
+  ]
+}
