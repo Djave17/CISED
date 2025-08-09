@@ -21,7 +21,7 @@ const ProgramaSchema = new mongoose.Schema({
   tipo: {
     type: String,
     required: true,
-    enum: ['Maestría', 'Curso', 'Diplomado']
+    enum: ['Maestría', 'Diplomado', 'Curso', 'Especialización']
   },
   // --- DATOS INTERNOS ---
   fechaInicio: {

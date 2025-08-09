@@ -24,23 +24,21 @@
             <form id="createProgramForm">
                 <div class="form-section">
                     <h2>Información de la Facultad</h2>
-                    <label for="faculty">Facultad:</label>
-                    <select id="faculty" name="facultad" required>
+                    <label for="facultad">Facultad:</label>
+                    <select id="facultad" name="facultad" required>
                         <option value="">Seleccione una facultad</option>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+
+                    <label for="nivel">Nivel:</label>
+                    <select id="nivel" name="nivel" required>
+                        <option value="">Seleccione un nivel</option>
                         <!-- Options will be populated by JavaScript -->
                     </select>
 
                     <h2>Información General del Programa</h2>
                     <label for="programName">Nombre del Programa:</label>
                     <input type="text" id="programName" name="nombrePrograma" required>
-
-                    <label for="programType">Tipo de Programa:</label>
-                    <select id="programType" name="tipo" required>
-                        <option value="">Seleccione un tipo</option>
-                        <option value="Maestría">Maestría</option>
-                        <option value="Curso">Curso</option>
-                        <option value="Diplomado">Diplomado</option>
-                    </select>
 
                     <label for="startDate">Fecha de Inicio:</label>
                     <input type="date" id="startDate" name="fechaInicio" required>
@@ -65,7 +63,7 @@
                         </div>
                         <!-- New subject and teacher pairs will be added here -->
                     </div>
-                    <button type="button" id="addAsignaturaPair">Agregar Otra Asignatura</button>
+                    <button type="button" id="addAsignatura">Agregar Otra Asignatura</button>
                 </div>
 
                 <button type="submit">Crear Programa</button>

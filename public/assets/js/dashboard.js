@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const programForm = document.getElementById('createProgramForm');
     const asignaturasContainer = document.getElementById('asignaturasContainer');
     const facultadSelect = document.getElementById('facultad'); // Get the facultad select element
+    const nivelSelect = document.getElementById('nivel'); // Get the nivel select element
     const addAsignaturaBtn = document.getElementById('addAsignatura');
 
     // Function to add a new subject and teacher input pair
@@ -21,27 +22,69 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Function to populate the faculty dropdown
-    const populateFacultadDropdown = () => {
-        const faculties = [
-            { value: "FCJHR", text: "Facultad de Ciencias Jurídicas, Humanidades y Relaciones Internacionales" },
-            { value: "FIA", text: "Facultad de Ingeniería y Arquitectura" },
-            { value: "FMED", text: "Facultad de Medicina" },
-            { value: "DPEC", text: "MEAE - Dirección de posgrado y educación continua" },
-            { value: "FMDCC", text: "Facultad de Marketing, Diseño y Ciencias de la comunicación" },
-            { value: "FCAE", text: "Facultad de Ciencias Administrativas y Económicas" },
-            { value: "FODO", text: "Facultad de Odontología" },
-            { value: "UC", text: "UAM College" }
-        ];
-
-        // Clear existing options (except the default "Seleccione una facultad")
+    const populateFacultadDropdown = async () => {
+        // Reset default option
         facultadSelect.innerHTML = '<option value="">Seleccione una facultad</option>';
 
-        // Add new options
-        faculties.forEach(faculty => {
+        // 1) Lista predefinida (nombres descriptivos)
+        const predefined = [
+            'Facultad de Ciencias Jurídicas, Humanidades y Relaciones Internacionales',
+            'Facultad de Ingeniería y Arquitectura',
+            'Facultad de Medicina',
+            'MEAE - Dirección de posgrado y educación continua',
+            'Facultad de Marketing, Diseño y Ciencias de la comunicación',
+            'Facultad de Ciencias Administrativas y Económicas',
+            'Facultad de Odontología',
+            'UAM College'
+        ];
+
+        const seen = new Set();
+        const addOption = (label) => {
+            if (!label || seen.has(label)) return;
             const option = document.createElement('option');
-            option.value = faculty.value;
-            option.textContent = faculty.text;
+            option.value = label;
+            option.textContent = label;
             facultadSelect.appendChild(option);
+            seen.add(label);
+        };
+
+        predefined.forEach(addOption);
+
+        // 2) Mezclar con lo que haya en BD
+        try {
+            const resp = await fetch('/api/academic-data');
+            if (resp.ok) {
+                const data = await resp.json();
+                data.forEach(doc => addOption(doc && doc.facultad));
+            }
+        } catch (e) {
+            console.warn('No se pudo obtener facultades desde BD. Se usa lista predefinida.');
+        }
+
+        // (Opcional) ordenar alfabéticamente, manteniendo el placeholder primero
+        const options = Array.from(facultadSelect.querySelectorAll('option'))
+            .filter(o => o.value !== '');
+        options.sort((a, b) => a.textContent.localeCompare(b.textContent, 'es'));
+        // Reinsertar ordenadas
+        facultadSelect.innerHTML = '<option value="">Seleccione una facultad</option>';
+        options.forEach(o => facultadSelect.appendChild(o));
+    };
+
+    // Function to populate the level dropdown (valores exactamente como en el enum del backend)
+    const populateLevelDropdown = () => {
+        const niveles = [
+            { value: "Maestría", text: "Maestría" },
+            { value: "Diplomado", text: "Diplomado" },
+            { value: "Curso", text: "Curso" },
+            { value: "Especialización", text: "Especialización" }
+        ];
+
+        nivelSelect.innerHTML = '<option value="">Seleccione un nivel</option>';
+        niveles.forEach(n => {
+            const option = document.createElement('option');
+            option.value = n.value; // usar exactamente el texto con acento
+            option.textContent = n.text;
+            nivelSelect.appendChild(option);
         });
     };
 
@@ -53,8 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
 
         const programName = document.getElementById('programName').value;
-        const programType = document.getElementById('programType').value;
         const facultad = document.getElementById('facultad').value; // Get faculty value
+        const nivel = document.getElementById('nivel') ? document.getElementById('nivel').value : '';
+        const programType = nivel; // Unificar: el tipo del programa será el nivel seleccionado
         const startDate = document.getElementById('startDate').value;
         const endDate = document.getElementById('endDate').value;
         const studentCount = document.getElementById('studentCount').value;
@@ -68,20 +112,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 asignaturas.push({ nombreAsignatura, docenteAsignado });
             }
         });
-        const programData = {
+        const singleProgram = {
             nombrePrograma: programName,
-            tipo: programType,
+            tipo: programType, // coincide con enum (acentos incluidos)
             fechaInicio: startDate,
             fechaFinalizacion: endDate,
             cantidadEstudiantes: parseInt(studentCount, 10),
-            asignaturas: asignaturas,
-            facultad: facultad
+            asignaturas: asignaturas
+        };
+
+        // Enviar exactamente el formato por lote { facultad, programas: [...] }
+        const programData = {
+            facultad: facultad,
+            programas: [singleProgram]
         };
 
         console.log('Submitting Program Data:', programData);
 
         // Placeholder URL - replace with your actual backend endpoint
-        const endpointUrl = '/api/programs';
+        // Usar el endpoint existente que actualiza AcademicData.programas
+        const endpointUrl = '/api/academic-data/programs';
 
         try {
             const response = await fetch(endpointUrl, {
@@ -101,16 +151,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 asignaturasContainer.innerHTML = ''; // Clear dynamic fields
                 addAsignaturaInput(); // Add one initial empty pair
             } else {
-                // Attempt to parse JSON error response, but fallback to status text
-                let errorData = await response.text(); // Read as text first
+                // Lee una sola vez el cuerpo y arma el mensaje de error
+                let raw = await response.text();
+                let msg = response.statusText;
                 try {
-                    errorData = JSON.parse(errorData); // Try to parse as JSON
-                } catch (e) {
-                    // If parsing fails, keep it as text
+                    const parsed = JSON.parse(raw);
+                    msg = parsed.message || msg;
+                } catch (_) {
+                    if (raw) msg = raw;
                 }
-                const error = await response.json();
-                console.error('Error creating program:', error);
-                alert('Error al crear el programa: ' + (error.message || response.statusText));
+                console.error('Error creating program:', { status: response.status, body: raw });
+                alert('Error al crear el programa: ' + msg);
             }
         } catch (error) {
             console.error('Network error:', error);
@@ -126,5 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     populateFacultadDropdown(); // Populate the faculty dropdown when the DOM is ready
+    populateLevelDropdown(); // Populate the level dropdown when the DOM is ready
     addAsignaturaInput(); // Add one initial subject/teacher pair on load
 });

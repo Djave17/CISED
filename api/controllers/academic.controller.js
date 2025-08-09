@@ -22,33 +22,38 @@ const getAllAcademicData = async (req, res) => {
 
 const createProgram = async (req, res) => {
   try {
-    const { facultad, nombrePrograma, tipo, fechaInicio, fechaFinalizacion, cantidadEstudiantes, asignaturas } = req.body;
+    const { facultad } = req.body;
 
-    // Find the AcademicData document for the given faculty
-    let academicData = await AcademicData.findOne({ facultad: facultad });
-
-    if (!academicData) {
-      // If faculty doesn't exist, return a 404 error
-      return res.status(404).json({ message: 'Facultad no encontrada.' });
+    if (!facultad || typeof facultad !== 'string' || facultad.trim() === '') {
+      return res.status(400).json({ message: 'El campo facultad es obligatorio.' });
     }
 
-    // Create the new program object
-    const newProgram = {
-      nombrePrograma,
-      tipo,
-      fechaInicio,
-      fechaFinalizacion,
-      cantidadEstudiantes,
-      asignaturas // This array should already be in the correct format from the frontend
-    };
+    // Permitir dos formatos: lote { facultad, programas: [...] } o único cuerpo plano
+    let programas = [];
+    if (Array.isArray(req.body.programas)) {
+      programas = req.body.programas;
+    } else {
+      const { nombrePrograma, tipo, fechaInicio, fechaFinalizacion, cantidadEstudiantes, asignaturas } = req.body;
+      programas = [{ nombrePrograma, tipo, fechaInicio, fechaFinalizacion, cantidadEstudiantes, asignaturas }];
+    }
 
-    // Push the new program into the programas array
-    academicData.programas.push(newProgram);
+    // Validación mínima de cada programa
+    const invalid = programas.find(p => !p || !p.nombrePrograma || !p.tipo || !p.fechaInicio || !p.fechaFinalizacion || p.cantidadEstudiantes == null);
+    if (invalid) {
+      return res.status(400).json({ message: 'Faltan campos obligatorios en uno o más programas.' });
+    }
 
-    // Save the updated document
+    // Buscar la facultad; si no existe, crearla
+    let academicData = await AcademicData.findOne({ facultad: facultad });
+    if (!academicData) {
+      academicData = new AcademicData({ facultad, programas: [] });
+    }
+
+    // Agregar programas
+    academicData.programas.push(...programas);
     await academicData.save();
 
-    res.status(201).json({ message: 'Programa creado con éxito!', program: newProgram });
+    res.status(201).json({ message: 'Programas creados con éxito!', programasAñadidos: programas.length });
   } catch (error) {
     console.error('Error creating program:', error);
     res.status(500).json({ message: 'Error interno del servidor al crear el programa.' });
