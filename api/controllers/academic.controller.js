@@ -20,7 +20,43 @@ const getAllAcademicData = async (req, res) => {
   }
 };
 
-// Exporta la función.
+const createProgram = async (req, res) => {
+  try {
+    const { facultad, nombrePrograma, tipo, fechaInicio, fechaFinalizacion, cantidadEstudiantes, asignaturas } = req.body;
+
+    // Find the AcademicData document for the given faculty
+    let academicData = await AcademicData.findOne({ facultad: facultad });
+
+    if (!academicData) {
+      // If faculty doesn't exist, return a 404 error
+      return res.status(404).json({ message: 'Facultad no encontrada.' });
+    }
+
+    // Create the new program object
+    const newProgram = {
+      nombrePrograma,
+      tipo,
+      fechaInicio,
+      fechaFinalizacion,
+      cantidadEstudiantes,
+      asignaturas // This array should already be in the correct format from the frontend
+    };
+
+    // Push the new program into the programas array
+    academicData.programas.push(newProgram);
+
+    // Save the updated document
+    await academicData.save();
+
+    res.status(201).json({ message: 'Programa creado con éxito!', program: newProgram });
+  } catch (error) {
+    console.error('Error creating program:', error);
+    res.status(500).json({ message: 'Error interno del servidor al crear el programa.' });
+  }
+};
+
+// Exporta las funciones.
 module.exports = {
-  getAllAcademicData
+  getAllAcademicData,
+  createProgram
 };
