@@ -3,74 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Programa - Dashboard</title>
-    <link rel="stylesheet" href="/assets/css/global.css">
-    <link rel="stylesheet" href="/assets/css/dashboard.css">
+    <title>Crear Programa - Sistema de Evaluación UAM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/create-program.css">
 </head>
 <body>
-    <div class="dashboard-container">
-        <aside class="sidebar">
-            <h2>Dashboard Menu</h2>
-            <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Gestionar Programas</a></li>
-                <li><a href="/dashboard/create-program.html" class="active">Crear Programa</a></li>
-                <li><a href="#">Gestionar Evaluaciones</a></li>
-                <li><a href="#">Reportes</a></li>
-            </ul>
-        </aside>
-        <main class="main-content">
-            <h1>Crear Nuevo Programa</h1>
-            <form id="createProgramForm">
-                <div class="form-section">
-                    <h2>Información de la Facultad</h2>
-                    <label for="facultad">Facultad:</label>
-                    <select id="facultad" name="facultad" required>
-                        <option value="">Seleccione una facultad</option>
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
-
-                    <label for="nivel">Nivel:</label>
-                    <select id="nivel" name="nivel" required>
-                        <option value="">Seleccione un nivel</option>
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
-
-                    <h2>Información General del Programa</h2>
-                    <label for="programName">Nombre del Programa:</label>
-                    <input type="text" id="programName" name="nombrePrograma" required>
-
-                    <label for="startDate">Fecha de Inicio:</label>
-                    <input type="date" id="startDate" name="fechaInicio" required>
-
-                    <label for="endDate">Fecha de Finalización:</label>
-                    <input type="date" id="endDate" name="fechaFinalizacion" required>
-
-                    <label for="studentCount">Cantidad de Estudiantes:</label>
-                    <input type="number" id="studentCount" name="cantidadEstudiantes" required min="0">
-                </div>
-
-                <div class="form-section">
-                    <h2>Asignaturas y Docentes</h2>
-                    <div id="asignaturasContainer">
-                        <!-- Initial subject and teacher pair -->
-                        <div class="asignatura-entry">
-                            <label for="asignaturaNombre_0">Nombre de la Asignatura:</label>
-                            <input type="text" class="asignatura-nombre" required>
-
-                            <label for="docenteAsignado_0">Docente Asignado:</label>
-                            <input type="text" class="docente-asignado" required>
-                        </div>
-                        <!-- New subject and teacher pairs will be added here -->
+    <!-- Overlay para móvil -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    
+    <!-- Contenedor principal de la aplicación -->
+    <div class="app-container">
+         <!-- Sidebar fijo -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="sidebar-logo">
+                    <div class="logo-icon">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GyhqAx7KK0M27H5LypfQVocF0UGozC2i7A&s" alt="UAM Logo" style="width:100%; height:100%; object-fit:cover; border:1px ; border-radius:4px;" />
                     </div>
-                    <button type="button" id="addAsignatura">Agregar Otra Asignatura</button>
-                </div>
+                    <div class="logo-text">Sistema de<br>Evaluación</div>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 7a2 2 0 012-2h10a2 2 0 012 2v2M5 11V9a2 2 0 012-2h10a2 2 0 012 2v2"></path>
+                            </svg>
+                            Gestionar Programas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active">
+                            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Crear Programa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
+                            Gestionar Evaluaciones
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            Reportes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Configuración
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
 
-                <button type="submit">Crear Programa</button>
-            </form>
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <!-- Header superior -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button id="menuToggle" class="menu-toggle" type="button" aria-label="Abrir menú">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    <div class="header-title-section">
+                        <h1 class="page-title">Crear Programa</h1>
+                        <nav class="breadcrumb">
+                            <span>Gestión</span>
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                            <span>Crear Programa</span>
+                        </nav>
+                    </div>
+                </div>
+                
+                <div class="header-right">
+                    <button class="notification-btn" type="button" aria-label="Notificaciones">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                        </svg>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    
+                    <div id="profileDropdown" class="user-profile-dropdown">
+                        <button class="profile-trigger" type="button" aria-expanded="false">
+                            <div class="user-avatar">MG</div>
+                            <div class="user-info">
+                                <span class="user-name">Dr. Maria González</span>
+                                <span class="user-role">Coordinador Académico</span>
+                            </div>
+                            <svg class="dropdown-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        
+                        <div class="profile-dropdown-menu">
+                            <div class="dropdown-header">
+                                <div class="dropdown-user-name">Dr. Maria González</div>
+                                <div class="dropdown-user-email">maria.gonzalez@uam.edu</div>
+                                <div class="dropdown-user-role">Coordinador Académico</div>
+                            </div>
+                            
+                            <div class="dropdown-menu">
+                                <a href="#" class="dropdown-item">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    Mi Perfil
+                                </a>
+                                <a href="#" class="dropdown-item">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    Configuración
+                                </a>
+                                <div class="dropdown-separator"></div>
+                                <a href="#" class="dropdown-item danger">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                    </svg>
+                                    Cerrar Sesión
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Área de contenido scrollable -->
+            <div class="content-area">
+                <div class="form-card">
+                    <div class="form-header">
+                        <h1>Crear Nuevo Programa Académico</h1>
+                        <p>Complete la información del programa y sus asignaturas correspondientes</p>
+                    </div>
+                    
+                    <div class="form-content">
+                        <form id="createProgramForm" novalidate>
+                            <!-- Selección de Facultad y Nivel -->
+                            <div class="form-section">
+                                <h2 class="section-title">
+                                    <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H3m2 0h2M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                    Información de la Facultad
+                                </h2>
+                                
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label" for="facultad">Facultad</label>
+                                        <select id="facultad" class="form-select" required>
+                                            <option value="">Seleccione una facultad</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="nivel">Nivel Académico</label>
+                                        <select id="nivel" class="form-select" required>
+                                            <option value="">Seleccione un nivel</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Información General del Programa -->
+                            <div class="form-section">
+                                <h2 class="section-title">
+                                    <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    Información General del Programa
+                                </h2>
+                                
+                                <div class="form-grid">
+                                    <div class="form-group full-width">
+                                        <label class="form-label" for="programSelector">Nombre del Programa</label>
+                                        <div class="program-selector-container">
+                                            <select id="programSelector" class="form-select program-selector">
+                                                <option value="">Seleccione un programa existente</option>
+                                                <option value="new">+ Agregar Nuevo Programa</option>
+                                            </select>
+                                            <input type="text" id="programName" class="form-input program-input" placeholder="Ingrese el nombre completo del programa" style="display: none;" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="startDate">Fecha de Inicio</label>
+                                        <input type="date" id="startDate" class="form-input" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="endDate">Fecha de Finalización</label>
+                                        <input type="date" id="endDate" class="form-input" required />
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label class="form-label" for="studentCount">Cantidad de Estudiantes</label>
+                                        <input type="number" id="studentCount" class="form-input" min="1" max="500" placeholder="0" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Asignaturas y Docentes -->
+                            <div class="form-section">
+                                <div class="asignaturas-header">
+                                    <h2 class="section-title">
+                                        <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                        </svg>
+                                        Asignaturas y Docentes
+                                    </h2>
+                                    <div class="asignaturas-actions">
+                                        <button type="button" id="addAsignatura" class="btn btn-secondary btn-add">
+                                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                            </svg>
+                                            Agregar Asignatura
+                                        </button>
+                                        <button type="button" id="removeAsignatura" class="btn btn-danger-outline btn-remove" disabled>
+                                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                            </svg>
+                                            Eliminar Asignatura
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div id="asignaturasContainer" class="asignaturas-container">
+                                    <!-- Las asignaturas se agregarán dinámicamente aquí -->
+                                </div>
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary btn-large">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-large">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Crear Programa
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
-
+    
     <script src="/assets/js/dashboard.js"></script>
-</body>
+    <script src="/assets/js/profile-dropdown.js"></script>
+    <script src="/assets/js/ui.js"></script>
+    </body>
 </html>

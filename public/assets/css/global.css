@@ -1,4 +1,3 @@
-@import "./dashboard.css";
 /* ======================================================
    SISTEMA DE EVALUACIÓN DOCENTE - UAM
    Estilos responsivos optimizados para todos los dispositivos
@@ -16,7 +15,7 @@
     --color-texto: #333333; /* Texto principal */
     --color-texto-claro: #666666; /* Texto secundario */
     --color-borde: #ddddddde; /* Bordes */
-    --color-fondo: #f8f9facd; /* Fondo claro */
+    --color-fondo: #f8f9fa; /* Fondo claro (sin alpha) */
     --color-fondo-tarjeta: #ffffffc5; /* Fondo tarjeta */
     --color-fondo-hover: #f0f8ff; /* Fondo hover */
   
@@ -52,6 +51,9 @@
     --transicion-lenta: all 0.5s ease;
   }
 
+/* Evitar fondo negro por defecto */
+body { background: var(--color-fondo); }
+
   /* ---- RESET Y ESTILOS BASE ---- */
   * {
     margin: 0;
@@ -74,9 +76,15 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     padding: var(--espaciado-m);
+  }
+
+  /* Dashboard pages override: occupy full viewport, no centered body */
+  body.dashboard-page {
+    padding: 0;
+    align-items: initial;
+    justify-content: initial;
+    background: var(--color-fondo);
   }
   
   /* Accesibilidad - Lectores de pantalla */
@@ -399,6 +407,155 @@
     .linea-paso {
       display: block;
     }
+  }
+  
+  /* === Dashboard base (sidebar, headers) === */
+  .dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background: var(--color-fondo);
+    align-items: stretch;
+  }
+
+  .sidebar {
+    width: 250px;
+    background: var(--color-primario);
+    color: #fff;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  @media (min-width: 1024px) {
+    .sidebar {
+      position: fixed;      /* menú fijo y visible siempre */
+      left: 0;
+      top: 0;
+      width: 250px;
+      height: 100vh;
+      min-height: 100vh;
+      overflow: hidden;     /* que no scrollee */
+      transform: translateX(0);
+      z-index: 1000;
+    }
+    /* Evitar scroll en los ítems del menú */
+    .sidebar .sidebar-nav,
+    .sidebar .sidebar-nav ul { overflow: hidden; }
+  }
+
+  .sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--color-borde);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sidebar-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .sidebar-nav { padding: 20px 0; }
+  .sidebar-nav ul { list-style: none; margin: 0; padding: 0; }
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #ffffffcc;
+    text-decoration: none;
+    transition: var(--transicion-media, all 0.2s ease);
+    border-left: 3px solid transparent;
+  }
+  .sidebar-nav a:hover { background: rgba(255,255,255,.08); color: #fff; border-left-color: var(--color-secundario); }
+  .sidebar-nav a.active { background: rgba(0,0,0,.12); color: #fff; border-left-color: var(--color-secundario); }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+  }
+  .sidebar-overlay.show { display: block; }
+
+  .main-content { flex: 1; margin-left: 0; }
+  /* En desktop, desplazamos el contenido para dejar visible el sidebar fijo */
+  @media (min-width: 1024px) { .main-content { margin-left: 250px; } }
+
+  /* Better inner spacing for dashboard main area */
+  .main-content { padding: 0 clamp(12px, 2.5vw, 24px) clamp(12px, 2.5vw, 24px); background: var(--color-fondo); }
+  @media (min-width: 1024px) {
+    .main-content { padding-top: 0; padding-left: 0 !important; padding-right: 0 !important; }
+  }
+  /* Eliminar cualquier margen superior del primer bloque para evitar "grieta" */
+  main.main-content > *:first-child { margin-top: 0 !important; }
+
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: #fff;
+    border-bottom: 1px solid var(--color-borde);
+    position: static; /* no sticky */
+  }
+  @media (min-width: 1024px) { .mobile-header { display: none; } }
+
+  .dashboard-header {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: var(--color-primario);
+    color: #fff;
+    border-bottom: 3px solid var(--color-secundario);
+    position: static; /* no sticky */
+  }
+  @media (min-width: 1024px) { .dashboard-header { display: flex; } }
+  /* Align header with fixed 250px sidebar on desktop */
+  @media (min-width: 1024px) {
+    .dashboard-header { margin-left: 250px; width: calc(100% - 250px); box-sizing: border-box; z-index: 2; }
+    /* Hard override to avoid being cut by late-loaded CSS */
+    .dashboard-container .dashboard-header { margin-left: 250px !important; width: calc(100% - 250px) !important; }
+  }
+
+  /* El header se ubica dentro del flujo de .main-content; no requiere desplazamiento extra */
+
+  .dashboard-header h1 { margin: 0; font-size: 18px; font-weight: 600; color: #fff; }
+
+  .header-right, .desktop-header-right { display: flex; align-items: center; gap: 12px; }
+
+  .notification-btn {
+    position: relative;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #ffffffcc;
+    transition: var(--transicion-media, all 0.2s ease);
+  }
+  .notification-btn:hover { background: rgba(255,255,255,.12); color: #fff; }
+  .notification-badge {
+    position: absolute;
+    top: 2px; right: 2px;
+    width: 16px; height: 16px;
+    background: var(--color-alerta);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
   }
   
   /* ---- SECCIONES DEL FORMULARIO ---- */
