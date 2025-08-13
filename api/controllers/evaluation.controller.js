@@ -14,6 +14,19 @@ const createEvaluation = async (req, res) => {
     res.status(status).json(response);
   }
 };
+// Get Evaluations 
+
+const getEvaluations = async (req, res) => {
+  try {
+    const evaluations = await evaluationService.getEvaluations();
+    res.status(200).json(evaluations);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+};
 
 // Exporta la función.
-module.exports = { createEvaluation };
+
+module.exports = { createEvaluation, getEvaluations };
+
+

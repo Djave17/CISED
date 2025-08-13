@@ -1,9 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const { createEvaluation } = require('../controllers/evaluation.controller');
+// api/routes/evaluation.routes.js
+const router = require('express').Router();
 
-// Cuando se reciba una petición POST a una URL con un parámetro (ej: '/api/evaluations/estudiante'),
-// se ejecutará la función createEvaluation.
-router.post('/:formType', createEvaluation);
+
+const ctrl = require('../controllers/evaluation.controller');
+
+// Rutas
+router.post('/:formType', ctrl.create); // crea evaluación (usa formType: estudiante/docente/directivo)
+router.get('/', ctrl.list);             // lista evaluaciones (opcional con filtros por query)
 
 module.exports = router;

@@ -9,8 +9,15 @@ const AsignaturaOfertadaSchema = new mongoose.Schema({
   docenteAsignado: {
     type: String,
     required: true
-  }
+  },
+  fechaInicioAsignatura: { type: Date, required: true },
+  fechaFinAsignatura:    { type: Date, required: true },
 });
+
+AsignaturaOfertadaSchema.path('fechaFinAsignatura').validate(function (value) {
+  if (!this.fechaInicioAsignatura || !value) return true;
+  return value >= this.fechaInicioAsignatura;
+}, 'La fecha de finalización de la asignatura debe ser posterior o igual a la fecha de inicio');
 
 // Nivel 2: Define el programa con sus datos de gestión y su lista de asignaturas.
 const ProgramaSchema = new mongoose.Schema({

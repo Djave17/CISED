@@ -30,4 +30,29 @@ const createEvaluation = async (formType, body) => {
   }
 };
 
-module.exports = { createEvaluation };
+/**
+ * Obtiene todas las evaluaciones de la base de datos.
+ * @returns {Promise<Array<Object>>} Lista de evaluaciones
+ */
+// api/services/evaluation.service.js
+const getEvaluations = async (filters = {}) => {   // ← plural aquí
+  try {
+    const { tipoFormulario, programa, asignatura, desde, hasta } = filters;
+    const q = {};
+    if (tipoFormulario) q.tipoFormulario = tipoFormulario;         
+    if (programa)       q['informacionAcademica.programa']   = programa;
+    if (asignatura)     q['informacionAcademica.asignatura'] = asignatura;
+    if (desde || hasta) {
+      q.createdAt = {};
+      if (desde) q.createdAt.$gte = new Date(desde);
+      if (hasta) q.createdAt.$lte = new Date(hasta);
+    }
+    return await Evaluation.find(q).lean();
+  } catch (error) {
+    const newError = new Error('Error al obtener las evaluaciones');
+    newError.statusCode = 500;
+    throw newError;
+  }
+};
+
+module.exports = { createEvaluation, getEvaluations };

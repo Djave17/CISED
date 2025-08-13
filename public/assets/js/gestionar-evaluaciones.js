@@ -1,209 +1,249 @@
 /**
- * Gestionar Evaluaciones - Main Script
- * Carga dinámica de filtros y manejo de interacciones
+ * Gestionar Evaluaciones - Script principal
+ * Carga filtros, respuestas de evaluaciones, calcula métricas y actualiza la UI.
+ * Requiere que existan en el HTML:
+ * - select#facultad, select#tipoPrograma, select#estado
+ * - span#total-respuestas, span#asignaturas-evaluadas, span#asignaturas-pendientes, span#porcentaje-promedio
+ * - tabla con id="evaluacionesTable" y un <tbody> en su interior
  */
 
-document.addEventListener('DOMContentLoaded', async () => {
-    // Elementos del DOM
+document.addEventListener('DOMContentLoaded', () => {
+    // Referencias a selects de filtro
     const facultadSelect = document.getElementById('facultad');
     const tipoProgramaSelect = document.getElementById('tipoPrograma');
     const estadoSelect = document.getElementById('estado');
+  
+    // Referencias a tarjetas resumen (ajusta IDs según tu HTML)
+    const totalRespuestasEl = document.getElementById('total-respuestas');
+    const asignaturasEvaluadasEl = document.getElementById('asignaturas-evaluadas');
+    const asignaturasPendientesEl = document.getElementById('asignaturas-pendientes');
+    const porcentajePromedioEl = document.getElementById('porcentaje-promedio');
+  
+    // Otros elementos
     const loadingIndicator = document.getElementById('loading-indicator');
     const errorContainer = document.getElementById('error-container');
     const resultadosContainer = document.getElementById('resultados-container');
+    const tbody = document.querySelector('#evaluacionesTable tbody');
   
-    // Datos en memoria para filtrado
+    // Datos en memoria
     let academicData = [];
+    let evaluations = [];
     let filteredPrograms = [];
   
-    // Inicialización
-    try {
-      showLoading(true);
-      await loadAcademicData();
-      populateFilters();
-      updateResults();
-    } catch (error) {
-      showError('Error al cargar los datos académicos: ' + error.message);
-    } finally {
-      showLoading(false);
-    }
+    // Inicializar todo
+    init();
   
-    // Event Listeners
-    facultadSelect?.addEventListener('change', updateResults);
-    tipoProgramaSelect?.addEventListener('change', updateResults);
-    estadoSelect?.addEventListener('change', updateResults);
-  
-    /**
-     * Carga los datos académicos desde la API
-     */
-    async function loadAcademicData() {
+    async function init() {
       try {
-        const response = await fetch('/api/academic-data');
-        if (!response.ok) {
-          throw new Error(`Error HTTP: ${response.status}`);
+        showLoading(true);
+        // Cargamos en paralelo la oferta académica y las evaluaciones
+        const [acadRes, evalRes] = await Promise.all([
+          fetch('/api/academic-data'),
+          fetch('/api/reports')
+        ]);
+  
+        if (!acadRes.ok || !evalRes.ok) {
+          throw new Error(`Error al cargar datos: académica(${acadRes.status}), evaluaciones(${evalRes.status})`);
         }
-        academicData = await response.json();
-      } catch (error) {
-        console.error('Error al cargar datos académicos:', error);
-        throw error;
+        academicData = await acadRes.json();
+        evaluations = await evalRes.json();
+  
+        populateFilters();
+        updateResults();
+      } catch (err) {
+        showError(err.message);
+      } finally {
+        showLoading(false);
       }
     }
   
-    /**
-     * Rellena los filtros con datos de la API
-     */
+    // Rellena los <select> de facultad y tipo de programa con datos únicos y ordenados
     function populateFilters() {
-      if (!facultadSelect || !tipoProgramaSelect) return;
-  
-      // Obtener valores únicos
       const facultades = new Set();
       const tiposPrograma = new Set();
   
       academicData.forEach(item => {
         if (item.facultad) facultades.add(item.facultad);
-        if (item.programas && Array.isArray(item.programas)) {
-          item.programas.forEach(programa => {
-            if (programa.tipo) tiposPrograma.add(programa.tipo);
-          });
-        }
+        (item.programas || []).forEach(prog => {
+          if (prog.tipo) tiposPrograma.add(prog.tipo);
+        });
       });
   
-      // Ordenar alfabéticamente
-      const sortedFacultades = Array.from(facultades).sort();
-      const sortedTipos = Array.from(tiposPrograma).sort();
-  
-      // Poblar select de facultades
-      sortedFacultades.forEach(facultad => {
-        const option = document.createElement('option');
-        option.value = facultad;
-        option.textContent = facultad;
-        facultadSelect.appendChild(option);
+      [...facultades].sort().forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f; opt.textContent = f;
+        facultadSelect.appendChild(opt);
       });
   
-      // Poblar select de tipos de programa
-      sortedTipos.forEach(tipo => {
-        const option = document.createElement('option');
-        option.value = tipo;
-        option.textContent = tipo;
-        tipoProgramaSelect.appendChild(option);
+      [...tiposPrograma].sort().forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t; opt.textContent = t;
+        tipoProgramaSelect.appendChild(opt);
       });
     }
   
-    /**
-     * Actualiza los resultados según los filtros seleccionados
-     */
+    // Recalcula filtros al cambiar selección
+    facultadSelect?.addEventListener('change', updateResults);
+    tipoProgramaSelect?.addEventListener('change', updateResults);
+    estadoSelect?.addEventListener('change', updateResults);
+  
+    // Filtra programas según facultad, tipo y estado; calcula métricas y renderiza tabla + tarjetas
     function updateResults() {
-      if (!resultadosContainer) return;
-      
-      const facultadSeleccionada = facultadSelect?.value;
-      const tipoSeleccionado = tipoProgramaSelect?.value;
-      const estadoSeleccionado = estadoSelect?.value;
+      const facSel  = facultadSelect?.value || '';
+      const tipoSel = tipoProgramaSelect?.value || '';
+      const estSel  = estadoSelect?.value || '';
   
-      // Filtrar programas
       filteredPrograms = [];
-      academicData.forEach(facultadData => {
-        if (facultadSeleccionada && facultadSeleccionada !== 'todos' && 
-            facultadData.facultad !== facultadSeleccionada) {
-          return;
-        }
   
-        if (facultadData.programas && Array.isArray(facultadData.programas)) {
-          facultadData.programas.forEach(programa => {
-            if (tipoSeleccionado && tipoSeleccionado !== 'todos' && 
-                programa.tipo !== tipoSeleccionado) {
-              return;
-            }
-            
-            // TODO: Implementar filtrado por estado cuando exista el endpoint
-            // Por ahora, todos los programas se marcan como pendientes
-            const estado = 'Pendiente';
-            
-            if (estadoSeleccionado && estadoSeleccionado !== 'todos' && 
-                estado !== estadoSeleccionado) {
-              return;
-            }
+      academicData.forEach(fac => {
+        if (facSel && facSel !== 'todos' && fac.facultad !== facSel) return;
   
-            filteredPrograms.push({
-              facultad: facultadData.facultad,
-              ...programa,
-              estado
-            });
+        (fac.programas || []).forEach(prog => {
+          if (tipoSel && tipoSel !== 'todos' && prog.tipo !== tipoSel) return;
+  
+          // Calculamos métricas del programa
+          const metricas = computeMetricsForProgram(prog);
+  
+          // Filtrar también por estado (si no es 'todos')
+          if (estSel && estSel !== 'todos' && metricas.estado.toUpperCase() !== estSel.toUpperCase()) return;
+  
+          filteredPrograms.push({
+            facultad: fac.facultad,
+            ...prog,
+            metricas
           });
+        });
+      });
+  
+      renderTable();
+      renderSummary();
+    }
+  
+    // Calcula las métricas para un programa usando el array de evaluations
+    function computeMetricsForProgram(programa) {
+      const totalAsignaturas = Array.isArray(programa.asignaturas) ? programa.asignaturas.length : 0;
+  
+      // Filtra las evaluaciones que pertenecen a este programa
+      const evalsPrograma = evaluations.filter(ev =>
+        ev.informacionAcademica &&
+        ev.informacionAcademica.programa === programa.nombrePrograma
+      );
+      const totalRespuestas = evalsPrograma.length;
+  
+      let asignaturasEvaluadas = 0;
+      let asignaturasPendientes = 0;
+  
+      // Para cada asignatura, calculamos el % de estudiantes que respondieron
+      (programa.asignaturas || []).forEach(asig => {
+        const evalsAsignatura = evalsPrograma.filter(ev =>
+          ev.informacionAcademica &&
+          ev.informacionAcademica.asignatura === asig.nombreAsignatura
+        );
+        const pctAsignatura = (evalsAsignatura.length / programa.cantidadEstudiantes) * 100;
+        if (pctAsignatura >= 60) {
+          asignaturasEvaluadas++;
+        } else {
+          asignaturasPendientes++;
         }
       });
   
-      renderResults();
+      const porcentajePromedio = totalAsignaturas > 0
+        ? Math.round((asignaturasEvaluadas / totalAsignaturas) * 100)
+        : 0;
+  
+      let estado = 'Pendiente';
+      if (porcentajePromedio >= 80) estado = 'COMPLETADO';
+      else if (porcentajePromedio >= 60) estado = 'EN PROGRESO';
+  
+      return { totalAsignaturas, totalRespuestas, asignaturasEvaluadas, asignaturasPendientes, porcentajePromedio, estado };
     }
   
-    /**
-     * Renderiza los resultados en la tabla
-     */
-    function renderResults() {
-      if (!resultadosContainer) return;
+    // Renderiza la tabla de programas con sus métricas
+    function renderTable() {
+      if (!tbody) return;
   
       if (filteredPrograms.length === 0) {
-        resultadosContainer.innerHTML = `
-          <div class="no-results">
-            <i class="fas fa-info-circle"></i>
-            <p>No se encontraron programas con los filtros seleccionados</p>
-          </div>
-        `;
+        tbody.innerHTML = '';
+        if (resultadosContainer) {
+          resultadosContainer.innerHTML = '<p>No hay programas para los filtros seleccionados.</p>';
+        }
         return;
       }
   
-      const tbody = document.querySelector('#evaluacionesTable tbody');
-      if (!tbody) return;
-      
-      tbody.innerHTML = filteredPrograms.map(programa => `
-        <tr>
-          <td>${programa.nombre || 'N/A'}</td>
-          <td>${programa.nivel || programa.tipo || 'N/A'}</td>
-          <td class="text-center">${programa.totalAsignaturas || '0'}</td>
-          <td class="text-center">${programa.totalRespuestas || '0'}</td>
-          <td class="text-center">${programa.asignaturasEvaluadas || '0'}</td>
-          <td class="text-center">${programa.asignaturasPendientes || '0'}</td>
-          <td>
-            <div class="progress" style="height: 20px;">
-              <div class="progress-bar bg-success" 
-                   role="progressbar" 
-                   style="width: ${programa.porcentajePromedio || 0}%"
-                   aria-valuenow="${programa.porcentajePromedio || 0}" 
-                   aria-valuemin="0" 
-                   aria-valuemax="100">
-                ${programa.porcentajePromedio || 0}%
+      if (resultadosContainer) resultadosContainer.innerHTML = '';
+  
+      tbody.innerHTML = filteredPrograms.map(prog => {
+        const m = prog.metricas;
+        const badgeClass = m.estado === 'COMPLETADO'
+          ? 'bg-success'
+          : m.estado === 'EN PROGRESO'
+          ? 'bg-warning'
+          : 'bg-danger';
+        const barClass = badgeClass;
+  
+        return `
+          <tr>
+            <td>${prog.nombrePrograma || 'N/A'}</td>
+            <td>${prog.tipo || 'N/A'}</td>
+            <td class="text-center">${m.totalAsignaturas}</td>
+            <td class="text-center">${m.totalRespuestas}</td>
+            <td class="text-center">${m.asignaturasEvaluadas}</td>
+            <td class="text-center">${m.asignaturasPendientes}</td>
+            <td>
+              <div class="progress" style="height:20px;">
+                <div class="progress-bar ${barClass}" role="progressbar"
+                  style="width:${m.porcentajePromedio}%" aria-valuenow="${m.porcentajePromedio}"
+                  aria-valuemin="0" aria-valuemax="100">
+                  ${m.porcentajePromedio}%
+                </div>
               </div>
-            </div>
-          </td>
-          <td class="text-center">
-            <span class="badge ${programa.estado === 'COMPLETADO' ? 'bg-success' : programa.estado === 'EN PROGRESO' ? 'bg-warning' : 'bg-danger'}">
-              ${programa.estado || 'PENDIENTE'}
-            </span>
-          </td>
-        </tr>
-      `).join('');
+            </td>
+            <td class="text-center">
+              <span class="badge ${badgeClass}">${m.estado}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
   
-    /**
-     * Muestra u oculta el indicador de carga
-     * @param {boolean} show - Mostrar u ocultar
-     */
+    // Actualiza las tarjetas de resumen superior
+    function renderSummary() {
+      let totalRespuestas = 0;
+      let totalAsignaturas = 0;
+      let totalAsignaturasEvaluadas = 0;
+  
+      filteredPrograms.forEach(p => {
+        const m = p.metricas;
+        totalRespuestas += m.totalRespuestas;
+        totalAsignaturas += m.totalAsignaturas;
+        totalAsignaturasEvaluadas += m.asignaturasEvaluadas;
+      });
+  
+      const pendientes = Math.max(totalAsignaturas - totalAsignaturasEvaluadas, 0);
+      const pctPromedio = totalAsignaturas > 0
+        ? Math.round((totalAsignaturasEvaluadas / totalAsignaturas) * 100)
+        : 0;
+  
+      if (totalRespuestasEl) totalRespuestasEl.textContent = totalRespuestas;
+      if (asignaturasEvaluadasEl) asignaturasEvaluadasEl.textContent = totalAsignaturasEvaluadas;
+      if (asignaturasPendientesEl) asignaturasPendientesEl.textContent = pendientes;
+      if (porcentajePromedioEl) porcentajePromedioEl.textContent = `${pctPromedio}%`;
+    }
+  
+    // Muestra u oculta el loader
     function showLoading(show) {
       if (!loadingIndicator) return;
       loadingIndicator.style.display = show ? 'block' : 'none';
     }
   
-    /**
-     * Muestra un mensaje de error
-     * @param {string} message - Mensaje de error
-     */
-    function showError(message) {
+    // Muestra un error y lo oculta a los 5 segundos
+    function showError(msg) {
       if (!errorContainer) return;
-      errorContainer.textContent = message;
+      errorContainer.textContent = msg;
       errorContainer.style.display = 'block';
-      
-      // Ocultar después de 5 segundos
       setTimeout(() => {
         errorContainer.style.display = 'none';
       }, 5000);
     }
   });
+  
