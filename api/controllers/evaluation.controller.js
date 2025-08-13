@@ -1,4 +1,4 @@
-const Evaluation = require('../models/evaluation');
+const EvaluationService = require('../services/evaluation.service');
 
 /*
  * Crea una nueva evaluación en la base de datos.
@@ -10,24 +10,15 @@ const Evaluation = require('../models/evaluation');
  * @param res: Respuesta del servidor
  */
 
-
 // Define una función asíncrona para crear (guardar) una nueva evaluación.
 const createEvaluation = async (req, res) => {
   try {
     // Extrae el tipo de formulario de la URL.
     const { formType } = req.params;
-    
-    // Combina los datos que vienen del frontend (req.body) con el tipo de formulario obtenido de la URL.
-    const evaluationData = {
-      ...req.body,
-      tipoFormulario: formType
-    };
 
-    // Crea una nueva instancia del modelo Evaluation con los datos combinados.
-    const newEvaluation = new Evaluation(evaluationData);
-    // Le pide a Mongoose que guarde el documento en la base de datos.
-    await newEvaluation.save();
-    
+    // Delega la creación al servicio.
+    await EvaluationService.createEvaluation(formType, req.body);
+
     // Si se guarda correctamente, responde con un estado 201 (Creado) y un mensaje de éxito.
     res.status(201).json({ message: 'Evaluación guardada exitosamente.' });
   } catch (error) {

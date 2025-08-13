@@ -1,11 +1,10 @@
-// Importa el modelo para poder buscar en la base de datos.
-const AcademicData = require('../models/AcademicData');
+const AcademicService = require('../services/academic.service');
 
 // Define la función que se ejecutará.
 const getAllAcademicData = async (req, res) => {
   try {
     // Busca TODOS los documentos en la colección 'academicdatas'.
-    const data = await AcademicData.find();
+    const data = await AcademicService.getAllAcademicData();
 
     // Si no encuentra nada, devuelve el error 404 que estás viendo.
     if (!data || data.length === 0) {
@@ -24,10 +23,6 @@ const createProgram = async (req, res) => {
   try {
     const { facultad } = req.body;
 
-    if (!facultad || typeof facultad !== 'string' || facultad.trim() === '') {
-      return res.status(400).json({ message: 'El campo facultad es obligatorio.' });
-    }
-
     // Permitir dos formatos: lote { facultad, programas: [...] } o único cuerpo plano
     let programas = [];
     if (Array.isArray(req.body.programas)) {
@@ -37,24 +32,13 @@ const createProgram = async (req, res) => {
       programas = [{ nombrePrograma, tipo, fechaInicio, fechaFinalizacion, cantidadEstudiantes, asignaturas }];
     }
 
-    // Validación mínima de cada programa
-    const invalid = programas.find(p => !p || !p.nombrePrograma || !p.tipo || !p.fechaInicio || !p.fechaFinalizacion || p.cantidadEstudiantes == null);
-    if (invalid) {
-      return res.status(400).json({ message: 'Faltan campos obligatorios en uno o más programas.' });
-    }
+    const count = await AcademicService.addPrograms(facultad, programas);
 
-    // Buscar la facultad; si no existe, crearla
-    let academicData = await AcademicData.findOne({ facultad: facultad });
-    if (!academicData) {
-      academicData = new AcademicData({ facultad, programas: [] });
-    }
-
-    // Agregar programas
-    academicData.programas.push(...programas);
-    await academicData.save();
-
-    res.status(201).json({ message: 'Programas creados con éxito!', programasAñadidos: programas.length });
+    res.status(201).json({ message: 'Programas creados con éxito!', programasAñadidos: count });
   } catch (error) {
+    if (error.message && (error.message.includes('obligatorio') || error.message.includes('Faltan campos'))) {
+      return res.status(400).json({ message: error.message });
+    }
     console.error('Error creating program:', error);
     res.status(500).json({ message: 'Error interno del servidor al crear el programa.' });
   }
