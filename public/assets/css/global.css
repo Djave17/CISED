@@ -1121,10 +1121,11 @@ body { background: var(--color-fondo); }
     top: 20px;
     left: 50%;
     transform: translateX(-50%) translateY(-100px);
-    background-color: white;
+    background-color: #f8f9fa; /* Fondo más oscuro para mejor contraste */
+    color: white; /* Color de texto oscuro para mejor contraste */
     border-radius: var(--radio-borde-m);
-    padding: var(--espaciado-m) var(--espaciado-l);
-    box-shadow: var(--sombra-fuerte);
+    padding: 1rem 1.5rem;
+    box-shadow: 0 4px 6px var(--color-borde);
     z-index: 1000;
     max-width: 90%;
     width: 400px;
@@ -1133,6 +1134,14 @@ body { background: var(--color-fondo); }
     justify-content: space-between;
     opacity: 0;
     transition: transform 0.5s ease, opacity 0.5s ease;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .alerta-flotante .mensaje-alerta {
+    color: inherit; /* Hereda el color del contenedor */
+    flex-grow: 1; /* Asegura que ocupe el espacio disponible */
+    margin-right: 1rem; /* Espacio entre el mensaje y el botón de cerrar */
   }
   
   .alerta-flotante.visible {
@@ -1142,14 +1151,20 @@ body { background: var(--color-fondo); }
   
   .alerta-flotante.exito {
     border-left: 4px solid var(--color-exito);
+    color: var(--color-texto);
+    background-color: #f0fdf4; /* Fondo verde claro para éxito */
   }
   
   .alerta-flotante.error {
     border-left: 4px solid var(--color-alerta);
+    color: var(--color-texto); /* Rojo oscuro para mejor contraste */
+    background-color: #fef2f2; /* Fondo rojo claro para error */
   }
   
   .alerta-flotante.info {
     border-left: 4px solid var(--color-info);
+    color: var(--color-texto);
+    background-color: #eef2fd; /* Fondo azul claro para info */
   }
   
   /* ---- ANIMACIONES ---- */

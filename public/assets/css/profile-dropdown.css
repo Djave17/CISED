@@ -191,8 +191,8 @@
   border-radius: var(--radio-borde-m);
   box-shadow: var(--sombra-media);
   z-index: 1000;
-  opacity: 0;
-  visibility: hidden;
+  opacity: 1;
+  visibility: visible;
   transform: translateY(-10px);
   transition: var(--transicion-rapida);
 }

@@ -98,6 +98,9 @@
                 <div class="filters-card">
                     <div class="filters-header">
                         <h2>Filtros de Evaluación</h2>
+                        <button id="resetFilters" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-undo"></i> Restablecer
+                        </button>
                         <button id="refreshData" class="btn btn-secondary">
                             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
@@ -107,28 +110,35 @@
                     </div>
                     <div class="filters-content">
                         <div class="filter-group">
-                            <label for="facultadFilter">Facultad</label>
-                            <select id="facultadFilter" class="form-select">
-                                <option value="">Todas las facultades</option>
-                            </select>
+                            <label for="facultad">Facultad</label>
+                            <div class="select-wrapper">
+                                <select id="facultad" class="form-select" aria-label="Seleccionar facultad">
+                                    <option value="todos">Todas las facultades</option>
+                                    <!-- Las opciones se cargarán dinámicamente -->
+                                </select>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
                         </div>
                         <div class="filter-group">
-                            <label for="tipoFilter">Tipo de Programa</label>
-                            <select id="tipoFilter" class="form-select">
-                                <option value="">Todos los tipos</option>
-                                <option value="Maestría">Maestría</option>
-                                <option value="Diplomado">Diplomado</option>
-                                <option value="Curso">Curso</option>
-                                <option value="Especialización">Especialización</option>
-                            </select>
+                            <label for="tipoPrograma">Tipo de Programa</label>
+                            <div class="select-wrapper">
+                                <select id="tipoPrograma" class="form-select" aria-label="Seleccionar tipo de programa">
+                                    <option value="todos">Todos los tipos</option>
+                                    <!-- Las opciones se cargarán dinámicamente -->
+                                </select>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
                         </div>
                         <div class="filter-group">
-                            <label for="estadoFilter">Estado de Evaluación</label>
-                            <select id="estadoFilter" class="form-select">
-                                <option value="">Todos los estados</option>
-                                <option value="completado">Completado (≥60%)</option>
-                                <option value="pendiente">Pendiente (<60%)</option>
-                            </select>
+                            <label for="estado">Estado de Evaluación</label>
+                            <div class="select-wrapper">
+                                <select id="estado" class="form-select" aria-label="Seleccionar estado de evaluación">
+                                    <option value="todos">Todos los estados</option>
+                                    <option value="Completado">Completado</option>
+                                    <option value="Pendiente">Pendiente</option>
+                                </select>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -221,6 +231,14 @@
                     </div>
                 </div>
 
+                <!-- Resultados -->
+                <div id="resultados-container" class="evaluation-results">
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <p>Seleccione los filtros para ver las evaluaciones</p>
+                    </div>
+                </div>
+
                 <!-- Detalle de asignaturas -->
                 <div class="evaluation-card">
                     <div class="card-header">
@@ -258,8 +276,17 @@
         </main>
     </div>
     
+    <!-- Loading indicator -->
+    <div id="loading-indicator" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>Cargando datos...</p>
+    </div>
+
+    <!-- Error container -->
+    <div id="error-container" class="error-container" style="display: none;"></div>
+
     <script src="/assets/js/ui.js"></script>
     <script src="/assets/js/profile-dropdown.js"></script>
-    <script src="/assets/js/evaluaciones.js"></script>
+    <script src="/assets/js/gestionar-evaluaciones.js"></script>
 </body>
 </html>
