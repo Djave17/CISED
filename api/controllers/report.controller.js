@@ -1,12 +1,11 @@
-const Evaluation = require('../models/evaluation');
+const reportService = require('../services/report.service');
 
-// Retrieve all evaluations for reporting purposes
 const getReport = async (req, res) => {
   try {
-    const evaluations = await Evaluation.find();
+    const evaluations = await reportService.getReport();
     res.status(200).json(evaluations);
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener los reportes.' });
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
