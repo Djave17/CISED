@@ -15,6 +15,7 @@ const academicRoutes = require('./routes/academic.routes');
 const questionFormRoutes = require('./routes/questionform.routes');
 const evaluationRoutes = require('./routes/evaluation.routes');
 const programRoutes = require('./routes/program.routes');
+const reportRoutes = require('./routes/report.routes');
 
 // --- Usar las Rutas ---
 // Le dice a la aplicación que para cualquier URL que empiece con '/api/academic-data', use las reglas de academicRoutes.
@@ -25,6 +26,8 @@ app.use('/api/forms', questionFormRoutes);
 app.use('/api/evaluations', evaluationRoutes);
 // Para URLs que empiecen con '/api/programs', usa las reglas de programRoutes.
 app.use('/api/programs', programRoutes);
+// Para URLs que empiecen con '/api/reports', usa las reglas de reportRoutes.
+app.use('/api/reports', reportRoutes);
 
 // --- Servir frontend estático ---
 app.use(express.static(path.join(__dirname, '../public')));

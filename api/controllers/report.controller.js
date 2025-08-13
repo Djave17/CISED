@@ -9,4 +9,13 @@ const getReport = async (req, res) => {
   }
 };
 
-module.exports = { getReport };
+const getFormStatistics = async (req, res) => {
+  try {
+    const stats = await reportService.getFormStatistics();
+    res.status(200).json(stats);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+};
+
+module.exports = { getReport, getFormStatistics };
