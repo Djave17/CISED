@@ -181,6 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
           : 'bg-danger';
         const barClass = badgeClass;
   
+       
+  
+      
+  
         return `
           <tr>
             <td>${prog.nombrePrograma || 'N/A'}</td>

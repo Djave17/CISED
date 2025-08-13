@@ -11,10 +11,7 @@ const AsignaturaSchema = new mongoose.Schema(
   { _id: false }
 );
 
-AsignaturaSchema.path('fechaFinAsignatura').validate(function (value) {
-  if (!this.fechaInicioAsignatura || !value) return true;
-  return value >= this.fechaInicioAsignatura;
-}, 'La fecha de finalización de la asignatura debe ser posterior o igual a la fecha de inicio');
+
 
 const ProgramSchema = new mongoose.Schema({
   nombrePrograma: { type: String, required: true, trim: true },

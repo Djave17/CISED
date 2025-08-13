@@ -152,16 +152,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const asignaturaEntry = document.createElement('div');
         asignaturaEntry.classList.add('asignatura-entry');
         asignaturaEntry.dataset.id = String(entryId);
+        
+        // Get today's date in YYYY-MM-DD format for the default date
+        const today = new Date().toISOString().split('T')[0];
+        
         asignaturaEntry.innerHTML = `
             <input type="checkbox" class="asignatura-checkbox" id="checkbox_${entryId}" />
             <div class="asignatura-grid">
                 <div class="form-group">
                     <label class="form-label" for="asignaturaNombre_${entryId}">Nombre de la Asignatura</label>
-                    <input class="form-input asignatura-nombre" type="text" id="asignaturaNombre_${entryId}" required placeholder="Ej: Matemáticas Aplicadas">
+                    <input class="form-input asignatura-nombre" type="text" id="asignaturaNombre_${entryId}" 
+                           name="nombreAsignatura" required placeholder="Ej: Matemáticas Aplicadas">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="docenteAsignado_${entryId}">Docente Asignado</label>
-                    <input class="form-input docente-asignado" type="text" id="docenteAsignado_${entryId}" required placeholder="Ej: Dr. Juan Pérez">
+                    <input class="form-input docente-asignado" type="text" id="docenteAsignado_${entryId}" 
+                           name="docenteAsignado" required placeholder="Ej: Dr. Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="fechaInicioAsignatura_${entryId}">Fecha Inicio</label>
+                    <input type="date" class="form-input fecha-inicio" id="fechaInicioAsignatura_${entryId}" 
+                           name="fechaInicioAsignatura" value="${today}" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="fechaFinAsignatura_${entryId}">Fecha Fin</label>
+                    <input type="date" class="form-input fecha-fin" id="fechaFinAsignatura_${entryId}" 
+                           name="fechaFinAsignatura" value="${today}" required>
                 </div>
             </div>
         `;
@@ -285,22 +301,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const endDate = document.getElementById('endDate').value;
         const studentCount = document.getElementById('studentCount').value;
 
-        // Collect subjects and teachers in pairs
+        // Collect subjects with all their data including dates
         const asignaturas = [];
         asignaturasContainer.querySelectorAll('.asignatura-entry').forEach(entry => {
-            const nombreAsignatura = entry.querySelector('.asignatura-nombre').value;
-            const docenteAsignado = entry.querySelector('.docente-asignado').value;
-            if (nombreAsignatura && docenteAsignado) {
-                asignaturas.push({ nombreAsignatura, docenteAsignado });
+            const nombreAsignatura = entry.querySelector('[name="nombreAsignatura"]').value;
+            const docenteAsignado = entry.querySelector('[name="docenteAsignado"]').value;
+            const fechaInicio = entry.querySelector('[name="fechaInicioAsignatura"]').value;
+            const fechaFin = entry.querySelector('[name="fechaFinAsignatura"]').value;
+            
+            // Validate dates
+            if (new Date(fechaInicio) > new Date(fechaFin)) {
+                alert('La fecha de inicio no puede ser posterior a la fecha de fin');
+                return;
+            }
+            
+            if (nombreAsignatura && docenteAsignado && fechaInicio && fechaFin) {
+                asignaturas.push({ 
+                    nombreAsignatura, 
+                    docenteAsignado, 
+                    fechaInicioAsignatura: new Date(fechaInicio).toISOString(),
+                    fechaFinAsignatura: new Date(fechaFin).toISOString()
+                });
             }
         });
+        // Create program object with all data
         const singleProgram = {
             nombrePrograma: programName,
-            tipo: programType, // coincide con enum (acentos incluidos)
-            fechaInicio: startDate,
-            fechaFinalizacion: endDate,
-            cantidadEstudiantes: parseInt(studentCount, 10),
-            asignaturas: asignaturas
+            tipo: programType, // debe coincidir con el enum del backend
+            fechaInicio: new Date(startDate).toISOString(),
+            fechaFinalizacion: new Date(endDate).toISOString(),
+            cantidadEstudiantes: parseInt(studentCount, 10) || 0,
+            asignaturas: asignaturas // Ya están formateadas con fechas ISO
         };
 
         // Enviar exactamente el formato por lote { facultad, programas: [...] }
