@@ -1,32 +1,42 @@
-const evaluationService = require('../services/evaluation.service');
+// api/controllers/evaluation.controller.js
 
-const createEvaluation = async (req, res) => {
+const {
+  createEvaluation,
+  getEvaluations
+} = require('../services/evaluation.service');
+
+/**
+ * Crea una nueva evaluación a partir del tipo de formulario y del body recibido.
+ * La URL debe incluir /api/evaluations/:formType, por ejemplo /api/evaluations/estudiante.
+ */
+async function create(req, res, next) {
   try {
     const { formType } = req.params;
-    const result = await evaluationService.createEvaluation(formType, req.body);
+    const result = await createEvaluation(formType, req.body);
     res.status(201).json(result);
-  } catch (error) {
-    const status = error.statusCode || 500;
-    const response = { message: error.message };
-    if (error.details) {
-      response.details = error.details;
-    }
-    res.status(status).json(response);
+  } catch (err) {
+    // Delegamos a un manejador de errores global si existe; si no, respondemos aquí
+    const status = err.statusCode || 500;
+    res.status(status).json({ message: err.message, details: err.details });
   }
-};
-// Get Evaluations 
+}
 
-const getEvaluations = async (req, res) => {
+/**
+ * Lista todas las evaluaciones. Acepta filtros por querystring:
+ *  - tipoFormulario: 'estudiante' | 'docente' | 'directivo'
+ *  - programa: nombre del programa
+ *  - asignatura: nombre de la asignatura
+ *  - desde: fecha ISO mínima (createdAt >=)
+ *  - hasta: fecha ISO máxima (createdAt <=)
+ */
+async function list(req, res, next) {
   try {
-    const evaluations = await evaluationService.getEvaluations();
-    res.status(200).json(evaluations);
-  } catch (error) {
-    res.status(error.statusCode || 500).json({ message: error.message });
+    const evaluations = await getEvaluations(req.query);
+    res.json(evaluations);
+  } catch (err) {
+    const status = err.statusCode || 500;
+    res.status(status).json({ message: err.message });
   }
-};
+}
 
-// Exporta la función.
-
-module.exports = { createEvaluation, getEvaluations };
-
-
+module.exports = { create, list };
