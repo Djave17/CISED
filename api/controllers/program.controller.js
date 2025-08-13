@@ -1,4 +1,4 @@
-const Program = require('../models/Program');
+const ProgramService = require('../services/program.service');
 
 // POST /api/programs
 // Acepta:
@@ -6,76 +6,15 @@ const Program = require('../models/Program');
 // 2) Un objeto { facultad, programas: [ ... ] } para creación en lote
 async function createProgram(req, res) {
   try {
-    // Caso 2: batch con { facultad, programas: [] }
-    if (Array.isArray(req.body?.programas)) {
-      const facultadGrupo = req.body.facultad;
-      const programas = req.body.programas;
-
-      if (!facultadGrupo || programas.length === 0) {
-        return res.status(400).json({ message: 'facultad y programas son requeridos.' });
-      }
-
-      // Validar mínimos por cada programa
-      const docs = programas.map(p => {
-        const {
-          nombrePrograma,
-          tipo,
-          fechaInicio,
-          fechaFinalizacion,
-          cantidadEstudiantes,
-          asignaturas = [],
-          nivel = ''
-        } = p;
-
-        if (!nombrePrograma || !tipo || !fechaInicio || !fechaFinalizacion) {
-          throw new Error('Cada programa debe incluir nombrePrograma, tipo, fechaInicio y fechaFinalizacion');
-        }
-
-        return {
-          nombrePrograma,
-          tipo,
-          fechaInicio,
-          fechaFinalizacion,
-          cantidadEstudiantes,
-          asignaturas,
-          facultad: facultadGrupo,
-          nivel
-        };
-      });
-
-      const created = await Program.insertMany(docs);
-      return res.status(201).json({ message: 'Programas creados', count: created.length, programas: created });
+    const result = await ProgramService.createProgram(req.body);
+    if (Array.isArray(result)) {
+      return res.status(201).json({ message: 'Programas creados', count: result.length, programas: result });
     }
-
-    // Caso 1: un solo programa
-    const {
-      nombrePrograma,
-      tipo,
-      fechaInicio,
-      fechaFinalizacion,
-      cantidadEstudiantes,
-      asignaturas = [],
-      facultad,
-      nivel = ''
-    } = req.body;
-
-    if (!nombrePrograma || !tipo || !fechaInicio || !fechaFinalizacion || !facultad) {
-      return res.status(400).json({ message: 'Faltan campos obligatorios.' });
-    }
-
-    const program = await Program.create({
-      nombrePrograma,
-      tipo,
-      fechaInicio,
-      fechaFinalizacion,
-      cantidadEstudiantes,
-      asignaturas,
-      facultad,
-      nivel
-    });
-
-    return res.status(201).json({ message: 'Programa creado', program });
+    return res.status(201).json({ message: 'Programa creado', program: result });
   } catch (err) {
+    if (err.message && (err.message.includes('requeridos') || err.message.startsWith('Cada programa') || err.message === 'Faltan campos obligatorios.')) {
+      return res.status(400).json({ message: err.message });
+    }
     console.error('Error creating program:', err);
     return res.status(500).json({ message: 'Error interno al crear el programa' });
   }
