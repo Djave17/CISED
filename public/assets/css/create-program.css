@@ -233,7 +233,7 @@
   
   /* ===== HEADER SUPERIOR FIJO ===== */
   .top-header {
-  background: white;
+  background: var(--color-surface-dark);
   border-bottom: 1px solid var(--color-borde);
   padding: 1rem 1.5rem;
   display: flex;
@@ -267,7 +267,7 @@
   
   .menu-toggle:hover {
   background: var(--color-fondo-hover);
-  color: var(--color-texto);
+  color: var(--color-text-light);
   }
   
   @media (min-width: 1024px) {
@@ -284,7 +284,7 @@
   .page-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--color-texto);
+  color: var(--color-text-light);
   line-height: 1.2;
   }
   
@@ -327,7 +327,7 @@
   
   .notification-btn:hover {
   background: var(--color-fondo-hover);
-  color: var(--color-texto);
+  color: var(--color-text-light);
   }
   
   .notification-badge {
@@ -396,7 +396,7 @@
   .user-name {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-texto);
+  color: var(--color-text-light);
   line-height: 1.2;
   }
 
@@ -462,8 +462,8 @@
   right: 0;
   margin-top: 0.5rem;
   width: 280px;
-  background: white;
-  border: 1px solid var(--color-borde);
+  background: var(--color-surface-dark);
+  border: 1px solid var(--color-border-dark);
   border-radius: var(--radio-borde);
   box-shadow: var(--sombra-fuerte);
   z-index: 1000;
@@ -510,7 +510,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  color: var(--color-texto);
+  color: var(--color-text-light);
   text-decoration: none;
   transition: var(--transicion-rapida);
   }
@@ -543,11 +543,11 @@
   
   /* ===== TARJETA DEL FORMULARIO ===== */
   .form-card {
-  background: white;
+  background: var(--color-surface-dark);
   border-radius: var(--radio-borde);
   box-shadow: var(--sombra-media);
   overflow: hidden;
-  border: 1px solid var(--color-borde);
+  border: 1px solid var(--color-border-dark);
   max-width: 1200px;
   margin: 0 auto;
   }
@@ -589,7 +589,7 @@
   .section-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--color-texto);
+  color: var(--color-text-light);
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
@@ -655,18 +655,18 @@
   
   .form-label {
   font-weight: 600;
-  color: var(--color-texto);
+  color: var(--color-text-light);
   font-size: 0.875rem;
   }
   
   .form-input,
   .form-select {
   padding: 0.75rem 1rem;
-  border: 1px solid var(--color-borde);
+  border: 1px solid var(--color-border-dark);
   border-radius: 8px;
   font-size: 0.875rem;
   transition: var(--transicion-rapida);
-  background: white;
+  background: var(--color-surface-dark);
   }
   
   .form-input:focus,
@@ -700,7 +700,7 @@
   
   .asignatura-entry {
   background: var(--color-fondo);
-  border: 1px solid var(--color-borde);
+  border: 1px solid var(--color-border-dark);
   border-radius: 12px;
   padding: 1.5rem;
   position: relative;
@@ -764,9 +764,9 @@
   }
   
   .btn-secondary {
-  background: white;
+  background: var(--color-surface-dark);
   color: var(--color-primario);
-  border: 1px solid var(--color-borde);
+  border: 1px solid var(--color-border-dark);
   }
   
   .btn-secondary:hover {

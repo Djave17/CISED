@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const app = express();
+app.set('view engine', 'ejs');
 
 // --- Middlewares (Plugins) ---
 // Habilita CORS para permitir que el frontend (en otro dominio) se comunique con esta API.
@@ -28,6 +29,15 @@ app.use('/api/evaluations', evaluationRoutes);
 app.use('/api/programs', programRoutes);
 // Para URLs que empiecen con '/api/reports', usa las reglas de reportRoutes.
 app.use('/api/reports', reportRoutes);
+
+// --- Rutas de Vistas del Dashboard ---
+app.get('/dashboard/gestionar-evaluaciones', (req, res) => {
+  res.render('pages/gestionar-evaluaciones', { page: 'gestionar-evaluaciones' });
+});
+
+app.get('/dashboard/create-program', (req, res) => {
+  res.render('pages/create-program', { page: 'create-program' });
+});
 
 // --- Servir frontend estático ---
 app.use(express.static(path.join(__dirname, '../public')));

@@ -1,9 +1,4 @@
-/* Dropdown de Perfil de Usuario - CSS Puro
-   Agregar después de create-program-enhanced.css */
-
-/* Usa variables globales ya definidas en global.css */
-/* Sombras y radios específicos del dropdown (no de color) */
-:root { --sombra-dropdown: 0 10px 40px rgba(0, 0, 0, 0.15); --radio-dropdown: 12px; --transicion: all 0.2s ease; }
+/* Dropdown de Perfil de Usuario - CSS Puro */
 
 /* ===== HEADER DESKTOP ===== */
 .dashboard-header {
@@ -11,16 +6,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 20px;
-  background: var(--color-primario);
+  background: #2c3e50;
   color: #fff;
   border-bottom: 3px solid var(--color-secundario);
-  position: static; /* no sticky, no overlay */
+  position: static;
 }
 
 @media (min-width: 1024px) {
   .dashboard-header {
     display: flex;
-    /* alineado con sidebar fijo de 250px */
     margin-left: 250px;
     width: calc(100% - 250px);
     box-sizing: border-box;
@@ -33,9 +27,6 @@
   color: #fff;
   font-weight: 600;
 }
-
-/* Evitar separación con el primer contenido debajo del header */
-.dashboard-header + * { margin-top: 0 !important; }
 
 .header-right {
   display: flex;
@@ -51,13 +42,12 @@
   background: transparent;
   border-radius: 8px;
   cursor: pointer;
-  color: var(--color-texto-claro);
-  transition: var(--transicion);
+  color: #fff;
+  transition: var(--transicion-rapida);
 }
 
 .notification-btn:hover {
-  background: rgba(6, 135, 160, 0.1);
-  color: var(--color-primario);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .notification-badge {
@@ -92,13 +82,14 @@
   background: transparent;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: var(--transicion);
+  transition: var(--transicion-rapida);
   font-family: inherit;
+  color: #fff;
 }
 
 .profile-trigger:hover {
-  background: rgba(6, 135, 160, 0.1);
-  border-color: rgba(6, 135, 160, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .profile-trigger.mobile {
@@ -138,11 +129,6 @@
   justify-content: center;
 }
 
-/* Ocultar fallback si hay imagen real */
-.avatar-img:not([src*="placeholder"]) + .avatar-fallback {
-  display: none;
-}
-
 /* ===== INFORMACIÓN DEL USUARIO ===== */
 .user-info {
   display: none;
@@ -160,7 +146,7 @@
 .user-name {
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-texto);
+  color: #fff;
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -170,7 +156,7 @@
 
 .user-role {
   font-size: 12px;
-  color: var(--color-primario);
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -180,7 +166,7 @@
 
 /* ===== FLECHA DEL DROPDOWN ===== */
 .dropdown-arrow {
-  color: var(--color-texto-claro);
+  color: rgba(255, 255, 255, 0.7);
   transition: transform 0.2s ease;
   flex-shrink: 0;
 }
@@ -202,13 +188,13 @@
   width: 240px;
   background: white;
   border: 1px solid var(--color-borde);
-  border-radius: var(--radio-dropdown);
-  box-shadow: var(--sombra-dropdown);
+  border-radius: var(--radio-borde-m);
+  box-shadow: var(--sombra-media);
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
-  transition: var(--transicion);
+  transition: var(--transicion-rapida);
 }
 
 .user-profile-dropdown.open .profile-dropdown-menu {
@@ -217,7 +203,6 @@
   transform: translateY(0);
 }
 
-/* Ajuste para móvil */
 .user-profile-dropdown.mobile .profile-dropdown-menu {
   right: -8px;
   width: 220px;
@@ -276,20 +261,31 @@
   line-height: 1.4;
 }
 
-.dropdown-item:hover { background: var(--color-fondo-hover); }
+.dropdown-item:hover {
+  background: var(--color-fondo-hover);
+}
 
-.dropdown-item:focus { outline: none; background: var(--color-fondo-hover); }
+.dropdown-item:focus {
+  outline: none;
+  background: var(--color-fondo-hover);
+}
 
 .dropdown-item svg {
   flex-shrink: 0;
   color: var(--color-texto-claro);
 }
 
-.dropdown-item.danger { color: var(--color-alerta); }
+.dropdown-item.danger {
+  color: var(--color-alerta);
+}
 
-.dropdown-item.danger:hover { background: rgba(220,38,38,.06); }
+.dropdown-item.danger:hover {
+  background: rgba(220, 38, 38, 0.06);
+}
 
-.dropdown-item.danger svg { color: var(--color-alerta); }
+.dropdown-item.danger svg {
+  color: var(--color-alerta);
+}
 
 /* ===== SEPARADOR ===== */
 .dropdown-separator {
@@ -298,7 +294,7 @@
   margin: 8px 0;
 }
 
-/* ===== ACTUALIZAR HEADER MÓVIL EXISTENTE ===== */
+/* ===== HEADER MÓVIL ===== */
 .mobile-header {
   display: flex;
   align-items: center;
@@ -332,7 +328,7 @@
   cursor: pointer;
   color: var(--color-texto-claro);
   border-radius: 6px;
-  transition: var(--transicion);
+  transition: var(--transicion-rapida);
 }
 
 .mobile-menu-btn:hover {
@@ -340,23 +336,27 @@
   color: var(--color-primario);
 }
 
-/* ===== MODO OSCURO ===== */
-/* Sin overrides de modo oscuro: el tema lo define global.css */
-
-/* ===== ACCESIBILIDAD ===== */
-.profile-trigger:focus-visible {
-  outline: 2px solid var(--color-primario);
-  outline-offset: 2px;
+/* ===== LOGO SECTION ===== */
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: var(--espaciado-s);
+  margin-bottom: var(--espaciado-l);
 }
 
-.dropdown-item:focus-visible {
-  outline: 2px solid var(--color-primario);
-  outline-offset: -2px;
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radio-borde-s);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
+.sidebar nav ul li a {
+  display: flex;
+  align-items: center;
+  gap: var(--espaciado-s);
+}
+
+.sidebar nav ul li a.active {
+  background-color: #34495e;
+  border-left: 4px solid var(--color-primario);
 }
