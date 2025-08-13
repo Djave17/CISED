@@ -161,6 +161,142 @@
   color: #155724;
 }
 
+/* ===== TABLA DE RESULTADOS ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+  min-width: 800px; /* Aumentado para acomodar más columnas */
+  background: var(--color-fondo-tarjeta);
+  border-radius: var(--radio-borde);
+  overflow: hidden;
+  box-shadow: var(--sombra-suave);
+}
+
+/* Estilos para celdas de la tabla */
+.data-table th,
+.data-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-borde);
+  vertical-align: middle;
+}
+
+.data-table th {
+  background-color: var(--color-fondo-encabezado);
+  font-weight: 600;
+  color: var(--color-texto-oscuro);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+  background-color: var(--color-fondo-hover);
+}
+
+/* Estilos para el nombre del programa */
+.program-name {
+  font-weight: 500;
+  color: var(--color-texto);
+  margin-bottom: 0.25rem;
+}
+
+.program-faculty {
+  font-size: 0.8125rem;
+  color: var(--color-texto-claro);
+}
+
+/* Estilos para los círculos de progreso */
+.progress-circle {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+}
+
+.progress-circle svg {
+  transform: rotate(-90deg);
+}
+
+.progress-circle-bg {
+  fill: none;
+  stroke: var(--color-borde);
+  stroke-width: 8;
+}
+
+.progress-circle-fill {
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.progress-circle span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+/* Estilos para los badges de estado */
+.status-badge {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  min-width: 100px;
+}
+
+.status-completado {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-pendiente {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.status-rezagado {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Alineación de celdas */
+.text-center {
+  text-align: center !important;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .data-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .data-table th,
+  .data-table td {
+    white-space: nowrap;
+  }
+}
+
 /* ===== TARJETAS DE ESTADÍSTICAS = */
 .stats-grid {
   display: grid;
