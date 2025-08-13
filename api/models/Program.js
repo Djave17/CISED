@@ -5,7 +5,7 @@ const AsignaturaSchema = new mongoose.Schema(
     nombreAsignatura: { type: String, required: true },
     docenteAsignado: { type: String, required: true },
     fechaInicioAsignatura: { type: Date, required: true },
-    fechaFinalizacionAsignatura: { type: Date, required: true },
+    fechaFinAsignatura:    { type: Date, required: true },
     
   },
   { _id: false }

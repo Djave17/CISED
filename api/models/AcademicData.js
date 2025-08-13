@@ -12,6 +12,7 @@ const AsignaturaOfertadaSchema = new mongoose.Schema({
   },
   fechaInicioAsignatura: { type: Date, required: true },
   fechaFinAsignatura:    { type: Date, required: true },
+
   
 });
 
