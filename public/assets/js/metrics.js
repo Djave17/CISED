@@ -80,9 +80,9 @@
         ? Math.round((asignaturasEvaluadas / totalAsignaturas) * 100)
         : 0;
   
-      let estado = 'PENDIENTE';
-      if (porcentajePromedio >= 80) estado = 'COMPLETADO';
-      else if (porcentajePromedio >= 60) estado = 'EN PROGRESO';
+      let estado = 'Pendiente';
+      if (porcentajePromedio >= 80) estado = 'Completado';
+      else if (porcentajePromedio >= 60) estado = 'En progreso';
   
       return {
         totalAsignaturas,

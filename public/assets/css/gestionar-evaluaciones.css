@@ -248,11 +248,46 @@
 }
 
 /* Estilos para los badges de estado */
+/* ===== ESTILOS DE BADGES DE ESTADO ===== */
 .status-badge {
   display: inline-block;
   padding: 0.35rem 0.75rem;
   border-radius: 50px;
   font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-transform: capitalize;
+  border-width: 1.5px;
+  border-style: solid;
+  transition: all 0.2s ease;
+}
+
+/* Estado: Completado */
+.badge.bg-success {
+  background-color: rgba(25, 135, 84, 0.1) !important;
+  color: #198754;
+  border-color: #198754;
+}
+
+/* Estado: En progreso */
+.badge.bg-warning {
+  background-color: rgba(255, 193, 7, 0.15) !important;
+  color: #ffc107;
+  border-color: #ffc107;
+}
+
+/* Estado: Pendiente */
+.badge.bg-danger {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+/* Efecto hover sutil */
+.status-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
